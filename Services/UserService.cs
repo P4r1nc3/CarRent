@@ -49,5 +49,29 @@ namespace CarRentApp.Services
         {
             return _dbContext.Users.ToList();
         }
+
+        public void UpdateUser(int userId, string name, string surname, string email, string password, Role role)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                if (_dbContext.Users.Any(u => u.Email == email && u.Id != userId))
+                {
+                    throw new InvalidOperationException("Another user with the given email already exists.");
+                }
+
+                user.Name = name;
+                user.Surname = surname;
+                user.Email = email;
+                user.Password = password;
+                user.Role = role;
+
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+        }
     }
 }
