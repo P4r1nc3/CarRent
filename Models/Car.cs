@@ -8,19 +8,16 @@ namespace CarRentApp.Models
         public int Id { get; set; }
 
         [Required]
-        public string Make { get; set; }
+        public required string Make { get; set; }
 
         [Required]
-        public string Model { get; set; }
+        public required string Model { get; set; }
 
         public int Year { get; set; }
 
         public int HorsePower { get; set; }
 
         [Required]
-        public CarState CarState { get; set; }
-
-        [Required]
-        public decimal PricePerDay { get; set; }
+        public required CarState CarState { get; set; }
     }
 }
