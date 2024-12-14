@@ -34,5 +34,15 @@ namespace CarRentApp.Services
             _dbContext.Users.Add(newUser);
             _dbContext.SaveChanges();
         }
+
+        public User GetUser(int userId)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+            return user;
+        }
     }
 }
