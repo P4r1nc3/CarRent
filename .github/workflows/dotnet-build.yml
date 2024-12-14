@@ -1,0 +1,70 @@
+name: Build and Test .NET Project with MySQL and Secrets
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USERNAME }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Setup .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'
+
+      # 3. Install EF Core CLI
+      - name: Install EF Core CLI
+        run: dotnet tool install --global dotnet-ef
+
+      # 4. Set up database connection string using secrets
+      - name: Set up database connection string
+        env:
+          DB_CONNECTION: server=localhost;database=${{ secrets.MYSQL_DATABASE }};user=${{ secrets.MYSQL_USERNAME }};password=${{ secrets.MYSQL_ROOT_PASSWORD }}
+        run: echo "CAR_RENT_DB_CONNECTION=$DB_CONNECTION" >> $GITHUB_ENV
+
+      # 5. Add dotnet tools to PATH (needed for `dotnet ef`)
+      - name: Add dotnet tools to PATH
+        run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
+
+      # 6. Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 7. Build the project
+      - name: Build the project
+        run: dotnet build --no-restore --configuration Release
+
+      # 8. Apply database migrations (EF Core)
+      - name: Apply database migrations
+        run: dotnet ef database update
+
+      # 9. Run tests
+      - name: Run tests
+        run: dotnet test --no-restore --configuration Release
