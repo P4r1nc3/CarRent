@@ -5,8 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarRentApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Car Rent Management" Height="500" Width="800">
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="10" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 
-    </Grid>
+		<Grid Grid.Row="0" Margin="5">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<Label Grid.Row="0" Grid.Column="0" Content="Marka:" VerticalAlignment="Center" Margin="5" />
+			<TextBox Grid.Row="0" Grid.Column="1" x:Name="MakeTextBox" Width="200" Margin="5" />
+
+			<Label Grid.Row="1" Grid.Column="0" Content="Model:" VerticalAlignment="Center" Margin="5" />
+			<TextBox Grid.Row="1" Grid.Column="1" x:Name="ModelTextBox" Width="200" Margin="5" />
+
+			<Label Grid.Row="2" Grid.Column="0" Content="Rok:" VerticalAlignment="Center" Margin="5" />
+			<TextBox Grid.Row="2" Grid.Column="1" x:Name="YearTextBox" Width="200" Margin="5" />
+
+			<Label Grid.Row="3" Grid.Column="0" Content="Cena za dzień:" VerticalAlignment="Center" Margin="5" />
+			<TextBox Grid.Row="3" Grid.Column="1" x:Name="PriceTextBox" Width="200" Margin="5" />
+
+			<Button Grid.Row="2" Grid.Column="3" Content="Dodaj Samochód" Width="150" Margin="5" Click="AddCarButton_Click" />
+		</Grid>
+
+		<ListView Grid.Row="2" x:Name="CarsListView" Margin="5">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="50" />
+					<GridViewColumn Header="Marka" DisplayMemberBinding="{Binding Make}" Width="150" />
+					<GridViewColumn Header="Model" DisplayMemberBinding="{Binding Model}" Width="150" />
+					<GridViewColumn Header="Rok" DisplayMemberBinding="{Binding Year}" Width="100" />
+					<GridViewColumn Header="Cena za dzień" DisplayMemberBinding="{Binding PricePerDay}" Width="150" />
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
 </Window>
