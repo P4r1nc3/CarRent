@@ -73,5 +73,19 @@ namespace CarRentApp.Services
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
             }
         }
+
+        public void RemoveUser(int userId)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                _dbContext.Users.Remove(user);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+        }
     }
 }
