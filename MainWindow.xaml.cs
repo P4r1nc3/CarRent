@@ -1,23 +1,54 @@
-﻿using System.Text;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using CarRentApp.Data;
+using CarRentApp.Models;
 
-namespace CarRentApp;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+namespace CarRentApp
 {
-    public MainWindow()
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        private AppDbContext _dbContext;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            _dbContext = new AppDbContext();
+            LoadCars();
+        }
+
+        private void LoadCars()
+        {
+            CarsListView.ItemsSource = _dbContext.Cars.ToList();
+        }
+
+        private void AddCarButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(MakeTextBox.Text) ||
+                string.IsNullOrWhiteSpace(ModelTextBox.Text) ||
+                !int.TryParse(YearTextBox.Text, out int year) ||
+                !decimal.TryParse(PriceTextBox.Text, out decimal price))
+            {
+                MessageBox.Show("Wypełnij wszystkie pola poprawnie!");
+                return;
+            }
+
+            var newCar = new Car
+            {
+                Make = MakeTextBox.Text,
+                Model = ModelTextBox.Text,
+                Year = year,
+                PricePerDay = price
+            };
+
+            _dbContext.Cars.Add(newCar);
+            _dbContext.SaveChanges();
+
+            LoadCars();
+
+            MakeTextBox.Clear();
+            ModelTextBox.Clear();
+            YearTextBox.Clear();
+            PriceTextBox.Clear();
+        }
     }
 }
