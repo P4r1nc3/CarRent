@@ -1,7 +1,3 @@
-### CarRent
-
----
-
 # CarRent
 
 CarRent to aplikacja WPF do zarz¹dzania wypo¿yczalni¹ samochodów, zbudowana w oparciu o .NET oraz Entity Framework Core. Aplikacja obs³uguje bazê danych MySQL.
@@ -26,7 +22,6 @@ Do uruchomienia projektu wymagane s¹:
 - [SDK .NET 6.0+](https://dotnet.microsoft.com/download)
 - MySQL Server lub kompatybilna baza danych
 
-
 ---
 
 ## Instalacja
@@ -48,21 +43,21 @@ Do uruchomienia projektu wymagane s¹:
 
 ## Konfiguracja
 
-Edytuj plik `AppDbContext.cs` i dostosuj connection string:
+Aby skonfigurowaæ po³¹czenie z baz¹ danych, nale¿y ustawiæ zmienn¹ œrodowiskow¹, która bêdzie przechowywaæ connection string. W tym celu:
 
-```csharp
-"server=localhost;database=car-rent;user=root;password=admin12345"
+### **Przyk³adowa wartoœæ zmiennej œrodowiskowej:**
+
+```plaintext
+CAR_RENT_DB_CONNECTION="server=localhost;database=car-rent;user=root;password=admin12345"
 ```
-
----
 
 ## Tworzenie bazy danych
 
 0. Zainstaluj narzêdzie Entity Framework Core:
 
-	```bash
-	dotnet tool install --global dotnet-ef
-	```
+   ```bash
+   dotnet tool install --global dotnet-ef
+   ```
 
 1. Utwórz pierwsz¹ migracjê:
 
@@ -78,6 +73,15 @@ Edytuj plik `AppDbContext.cs` i dostosuj connection string:
 
 ---
 
+## Uruchomienie aplikacji
+
+Aby uruchomiæ aplikacjê, nale¿y wykonaæ polecenie:
+```bash
+dotnet run
+```
+
+---
+
 ## Zale¿noœci
 
 Projekt korzysta z nastêpuj¹cych pakietów:
@@ -88,3 +92,5 @@ Projekt korzysta z nastêpuj¹cych pakietów:
 - **Microsoft.EntityFrameworkCore.Tools** (v8.0.2)  
 - **MySql.EntityFrameworkCore** (v8.0.0)  
 - **Pomelo.EntityFrameworkCore.MySql** (v8.0.0)  
+
+---
