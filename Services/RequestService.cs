@@ -53,5 +53,10 @@ namespace CarRentApp.Services
             }
             return request;
         }
+
+        public List<Request> GetRequests()
+        {
+            return _dbContext.Requests.ToList();
+        }
     }
 }
