@@ -30,6 +30,16 @@ namespace CarRentApp.Services
             _dbContext.SaveChanges();
         }
 
+        public Car GetCar(int carId)
+        {
+            var car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
+            if (car == null)
+            {
+                throw new KeyNotFoundException($"Car with ID {carId} not found.");
+            }
+            return car;
+        }
+
         public List<Car> GetCars()
         {
             return _dbContext.Cars.ToList();
