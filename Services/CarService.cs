@@ -34,5 +34,24 @@ namespace CarRentApp.Services
         {
             return _dbContext.Cars.ToList();
         }
+
+        public void UpdateCar(int carId, string make, string model, int year, int horsePower, CarState carState)
+        {
+            var car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
+            if (car != null)
+            {
+                car.Make = make;
+                car.Model = model;
+                car.Year = year;
+                car.HorsePower = horsePower;
+                car.CarState = carState;
+
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Car with ID {carId} not found.");
+            }
+        }
     }
 }
