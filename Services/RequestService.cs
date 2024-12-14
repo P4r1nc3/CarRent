@@ -44,5 +44,14 @@ namespace CarRentApp.Services
             _dbContext.SaveChanges();
         }
 
+        public Request GetRequest(int requestId)
+        {
+            var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
+            if (request == null)
+            {
+                throw new KeyNotFoundException($"Request with ID {requestId} not found.");
+            }
+            return request;
+        }
     }
 }
