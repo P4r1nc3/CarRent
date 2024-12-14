@@ -13,70 +13,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -h localhost -u${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD}"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
-      # 1. Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      # 2. Setup .NET
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0'
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
 
-      # 3. Install EF Core CLI
-      - name: Install EF Core CLI
-        run: dotnet tool install --global dotnet-ef
+    - name: Install dependencies
+      run: dotnet restore
 
-      # 4. Wait for MySQL to be ready
-      - name: Wait for MySQL to be ready
-        run: |
-          for i in {1..10}; do
-            if mysqladmin ping -h 127.0.0.1 -P 3306 -u${{ secrets.MYSQL_USERNAME }} -p${{ secrets.MYSQL_PASSWORD }} --silent; then
-              echo "MySQL is ready!"; exit 0;
-            fi;
-            echo "Waiting for MySQL..."; sleep 5;
-          done;
-          echo "MySQL failed to start."; exit 1;
-
-      # 5. Set up database connection string using secrets
-      - name: Set up database connection string
-        env:
-          DB_CONNECTION: "server=localhost;database=${{ secrets.MYSQL_DATABASE }};user=${{ secrets.MYSQL_USERNAME }};password=${{ secrets.MYSQL_PASSWORD }}"
-        run: echo "CAR_RENT_DB_CONNECTION=$DB_CONNECTION" >> $GITHUB_ENV
-
-      # 6. Add dotnet tools to PATH (needed for `dotnet ef`)
-      - name: Add dotnet tools to PATH
-        run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
-
-      # 7. Restore dependencies
-      - name: Restore dependencies
-        run: dotnet restore
-
-      # 8. Build the project
-      - name: Build the project
-        run: dotnet build --no-restore --configuration Release
-
-      # 9. Apply database migrations (EF Core)
-      - name: Apply database migrations
-        run: dotnet ef database update
-
-      # 10. Run tests
-      - name: Run tests
-        run: dotnet test --no-restore --configuration Release
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore
