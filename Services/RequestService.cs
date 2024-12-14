@@ -9,25 +9,20 @@ namespace CarRentApp.Services
     public class RequestService
     {
         private readonly AppDbContext _dbContext;
+        private readonly UserService _userService;
+        private readonly CarService _carService;
 
-        public RequestService(AppDbContext dbContext)
+        public RequestService(AppDbContext dbContext, UserService userService, CarService carService)
         {
             _dbContext = dbContext;
+            _userService = userService;
+            _carService = carService;
         }
 
         public void CreateRequest(int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
         {
-            var car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
-            if (car == null)
-            {
-                throw new KeyNotFoundException($"Car with ID {carId} not found.");
-            }
-
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"User with ID {userId} not found.");
-            }
+            var car = _carService.GetCar(carId);
+            var user = _userService.GetUser(userId);
 
             var newRequest = new Request
             {
