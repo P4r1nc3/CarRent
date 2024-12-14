@@ -14,5 +14,25 @@ namespace CarRentApp.Services
         {
             _dbContext = dbContext;
         }
+
+        public void AddUser(string name, string surname, string email, string password, Role role)
+        {
+            if (_dbContext.Users.Any(u => u.Email == email))
+            {
+                throw new InvalidOperationException("User with the given email already exists.");
+            }
+
+            var newUser = new User
+            {
+                Name = name,
+                Surname = surname,
+                Email = email,
+                Password = password,
+                Role = role
+            };
+
+            _dbContext.Users.Add(newUser);
+            _dbContext.SaveChanges();
+        }
     }
 }
