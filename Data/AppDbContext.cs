@@ -1,4 +1,4 @@
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+vvusing Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using CarRentApp.Models;
 
@@ -7,6 +7,8 @@ namespace CarRentApp.Data
     public class AppDbContext : DbContext
     {
         public DbSet<Car> Cars { get; set; }
+        public DbSet<Request> Requests { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
