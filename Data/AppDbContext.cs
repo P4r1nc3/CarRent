@@ -10,9 +10,15 @@ namespace CarRentApp.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // TODO This will need to be retrieved from environment variables or a local configuration file
+            var connectionString = Environment.GetEnvironmentVariable("CAR_RENT_DB_CONNECTION");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("The connection string was not found in the environment variables.");
+            }
+
             optionsBuilder.UseMySql(
-                "server=localhost;database=car-rent;user=root;password=admin12345",
+                connectionString,
                 new MySqlServerVersion(new Version(8, 0, 32))
             );
         }
