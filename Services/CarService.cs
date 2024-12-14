@@ -53,5 +53,19 @@ namespace CarRentApp.Services
                 throw new KeyNotFoundException($"Car with ID {carId} not found.");
             }
         }
+
+        public void RemoveCar(int carId)
+        {
+            var car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
+            if (car != null)
+            {
+                _dbContext.Cars.Remove(car);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Car with ID {carId} not found.");
+            }
+        }
     }
 }
