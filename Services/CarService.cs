@@ -29,5 +29,10 @@ namespace CarRentApp.Services
             _dbContext.Cars.Add(newCar);
             _dbContext.SaveChanges();
         }
+
+        public List<Car> GetCars()
+        {
+            return _dbContext.Cars.ToList();
+        }
     }
 }
