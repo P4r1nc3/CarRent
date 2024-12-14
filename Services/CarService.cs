@@ -14,5 +14,20 @@ namespace CarRentApp.Services
         {
             _dbContext = dbContext;
         }
+
+        public void AddCar(string make, string model, int year, int horsePower, CarState carState)
+        {
+            var newCar = new Car
+            {
+                Make = make,
+                Model = model,
+                Year = year,
+                HorsePower = horsePower,
+                CarState = carState
+            };
+
+            _dbContext.Cars.Add(newCar);
+            _dbContext.SaveChanges();
+        }
     }
 }
