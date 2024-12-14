@@ -78,5 +78,18 @@ namespace CarRentApp.Services
             }
         }
 
+        public void RemoveRequest(int requestId)
+        {
+            var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
+            if (request != null)
+            {
+                _dbContext.Requests.Remove(request);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Request with ID {requestId} not found.");
+            }
+        }
     }
 }
