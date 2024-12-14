@@ -58,5 +58,25 @@ namespace CarRentApp.Services
         {
             return _dbContext.Requests.ToList();
         }
+
+        public void UpdateRequest(int requestId, int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
+        {
+            var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
+            if (request != null)
+            {
+                request.CarId = carId;
+                request.UserId = userId;
+                request.StartDate = startDate;
+                request.EndDate = endDate;
+                request.IsAccepted = isAccepted;
+
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"Request with ID {requestId} not found.");
+            }
+        }
+
     }
 }
