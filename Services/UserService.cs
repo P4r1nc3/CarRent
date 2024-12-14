@@ -44,5 +44,10 @@ namespace CarRentApp.Services
             }
             return user;
         }
+
+        public List<User> GetUsers()
+        {
+            return _dbContext.Users.ToList();
+        }
     }
 }
