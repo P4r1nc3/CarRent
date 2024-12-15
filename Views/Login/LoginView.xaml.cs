@@ -13,7 +13,6 @@ namespace CarRentApp.Views.Login
     public partial class LoginView : UserControl
     {
         private readonly UserService _userService;
-        private readonly UserContext _userContext;
 
         public event RoutedEventHandler? SwitchToRegister;
         public event RoutedEventHandler? SwitchToEmployee;
@@ -22,7 +21,6 @@ namespace CarRentApp.Views.Login
         {
             InitializeComponent();
             _userService = new UserService(new AppDbContext());
-            _userContext = UserContext.GetInstance();
         }
 
         private void SignIn_Click(object sender, RoutedEventArgs e)
@@ -46,7 +44,7 @@ namespace CarRentApp.Views.Login
                 if (user != null)
                 {
                     // Save the current user to the UserContext
-                    _userContext.SetCurrentUser(user);
+                    UserContext.GetInstance().SetCurrentUser(user);
 
                     // Switch to the appropriate view based on user role
                     if (user.Role == Role.Customer)

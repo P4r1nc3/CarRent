@@ -1,4 +1,5 @@
 using CarRentApp.Models;
+using System;
 
 namespace CarRentApp.Context
 {
@@ -7,7 +8,9 @@ namespace CarRentApp.Context
         private static UserContext? _instance;
         private User? _currentUser;
 
-        private UserContext() {}
+        public event Action? CurrentUserChanged;
+
+        private UserContext() { }
 
         public static UserContext GetInstance()
         {
@@ -21,6 +24,7 @@ namespace CarRentApp.Context
         public void SetCurrentUser(User user)
         {
             _currentUser = user;
+            CurrentUserChanged?.Invoke();
         }
 
         public User? GetCurrentUser()
@@ -31,6 +35,7 @@ namespace CarRentApp.Context
         public void Logout()
         {
             _currentUser = null;
+            CurrentUserChanged?.Invoke();
         }
     }
 }
