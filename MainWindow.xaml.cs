@@ -18,8 +18,8 @@ namespace CarRentApp
 
             // Event handlers
             loginView.SwitchToRegister += (_, __) => MainContent.Content = registerView;
+            loginView.SwitchToEmployee += (_, __) => MainContent.Content = employeeView;
             registerView.SwitchToLogin += (_, __) => MainContent.Content = loginView;
-            registerView.SwitchToEmployee += (_, __) => MainContent.Content = employeeView;
             employeeView.Logout += (_, __) => MainContent.Content = loginView;
 
             // Set initial view
