@@ -10,9 +10,9 @@ namespace CarRentApp.Services
     {
         private readonly DatabaseContext _dbContext;
 
-        public UserService(DatabaseContext dbContext)
+        public UserService()
         {
-            _dbContext = dbContext;
+            _dbContext = new DatabaseContext();
         }
 
         public User AddUser(string name, string surname, string email, string password, Role role)

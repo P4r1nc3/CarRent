@@ -14,14 +14,13 @@ namespace CarRentApp.Views.Login
         private readonly UserService _userService;
         private readonly UserContext _userContext;
 
-
         public event RoutedEventHandler? SwitchToRegister;
         public event RoutedEventHandler? SwitchToEmployee;
 
         public LoginView()
         {
             InitializeComponent();
-            _userService = new UserService(new DatabaseContext());
+            _userService = new UserService();
             _userContext = UserContext.GetInstance();
         }
 
