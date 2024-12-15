@@ -5,33 +5,20 @@ namespace CarRentApp
 {
     public partial class MainWindow : Window
     {
-        private readonly LoginView _loginView;
-        private readonly RegisterView _registerView;
-
         public MainWindow()
         {
             InitializeComponent();
 
             // Initialize views
-            _loginView = new LoginView();
-            _registerView = new RegisterView();
+            var loginView = new LoginView();
+            var registerView = new RegisterView();
 
-            // Set event handlers
-            _loginView.SwitchToRegister += SwitchToRegisterView;
-            _registerView.SwitchToLogin += SwitchToLoginView;
+            // Event handlers as lambdas
+            loginView.SwitchToRegister += (_, __) => MainContent.Content = registerView;
+            registerView.SwitchToLogin += (_, __) => MainContent.Content = loginView;
 
             // Set initial view
-            MainContent.Content = _loginView;
-        }
-
-        private void SwitchToRegisterView(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = _registerView;
-        }
-
-        private void SwitchToLoginView(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = _loginView;
+            MainContent.Content = loginView;
         }
     }
 }
