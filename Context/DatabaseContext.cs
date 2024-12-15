@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using CarRentApp.Models;
 using System;
 
-namespace CarRentApp.Data
+namespace CarRentApp.Context
 {
-    public class AppDbContext : DbContext
+    public class DatabaseContext : DbContext
     {
         public DbSet<Car> Cars { get; set; }
         public DbSet<Request> Requests { get; set; }

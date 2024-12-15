@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CarRentApp.Context;
-using CarRentApp.Data;
 using CarRentApp.Models;
 using CarRentApp.Services;
 
@@ -20,7 +19,7 @@ namespace CarRentApp.Views.Login
         public LoginView()
         {
             InitializeComponent();
-            _userService = new UserService(new AppDbContext());
+            _userService = new UserService(new DatabaseContext());
         }
 
         private void SignIn_Click(object sender, RoutedEventArgs e)
