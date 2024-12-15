@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace CarRentApp.Views
+namespace CarRentApp.Views.Login
 {
     public partial class LoginView : UserControl
     {
