@@ -1,28 +1,65 @@
 <UserControl x:Class="CarRentApp.Views.Login.LoginView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
-            <TextBlock Text="Login" 
-                       FontSize="28" 
-                       FontWeight="Bold" 
-                       Foreground="#333" 
-                       HorizontalAlignment="Center" 
+	<Grid>
+		<!-- Central content layout using StackPanel -->
+		<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+
+			<!-- Title -->
+			<TextBlock Text="Login"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#333"
+                       HorizontalAlignment="Center"
                        Margin="0,0,0,20" />
 
-            <TextBlock Text="Do not have an account?" 
-                       FontSize="14" 
-                       Foreground="#555" 
-                       HorizontalAlignment="Center" 
-                       Margin="0,10,0,5"/>
+			<!-- Email Field -->
+			<TextBlock Text="E-mail"
+                       FontSize="14"
+                       Foreground="#555"
+                       Margin="0,5,0,0"/>
+			<TextBox x:Name="EmailTextBox"
+                     Height="30"
+                     BorderBrush="#0078D7"
+                     BorderThickness="1"
+                     Padding="5" />
 
-            <TextBlock Text="Register here" 
-                       FontSize="14" 
-                       Foreground="#0078D7" 
-                       HorizontalAlignment="Center" 
-                       Cursor="Hand" 
+			<!-- Password Field -->
+			<TextBlock Text="Password"
+                       FontSize="14"
+                       Foreground="#555"
+                       Margin="0,10,0,0"/>
+			<PasswordBox x:Name="PasswordBox"
+                         Height="30"
+                         BorderBrush="#0078D7"
+                         BorderThickness="1"
+                         Padding="5" />
+
+			<!-- Login Button -->
+			<Button Content="Sign In"
+                    Height="40"
+					Width="200"
+                    Margin="0,20,0,0"
+                    Background="#0078D7"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    BorderThickness="0"
+                    HorizontalAlignment="Center"/>
+
+			<!-- Navigation to Register -->
+			<TextBlock Text="Do not have an account?"
+                       FontSize="14"
+                       Foreground="#555"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,5"/>
+
+			<TextBlock Text="Register here"
+                       FontSize="14"
+                       Foreground="#0078D7"
+                       HorizontalAlignment="Center"
+                       Cursor="Hand"
                        TextDecorations="Underline"
                        MouseLeftButtonUp="SwitchToRegisterView" />
-        </StackPanel>
-    </Grid>
+		</StackPanel>
+	</Grid>
 </UserControl>
