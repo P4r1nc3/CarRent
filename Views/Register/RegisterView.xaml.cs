@@ -1,8 +1,8 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using CarRentApp.Data;
 using CarRentApp.Context;
+using CarRentApp.Data;
 using CarRentApp.Models;
 using CarRentApp.Services;
 
@@ -13,6 +13,7 @@ namespace CarRentApp.Views.Register
         private readonly UserService _userService;
 
         public event RoutedEventHandler? SwitchToLogin;
+        public event RoutedEventHandler? SwitchToEmployee;
 
         public RegisterView()
         {
@@ -47,8 +48,8 @@ namespace CarRentApp.Views.Register
                 // Success message
                 MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Switch back to Login View
-                SwitchToLogin?.Invoke(this, new RoutedEventArgs());
+                // Call the method to switch to Employee view
+                SwitchToEmployeeView();
             }
             catch (InvalidOperationException ex)
             {
@@ -63,6 +64,11 @@ namespace CarRentApp.Views.Register
         private void SwitchToLoginView(object sender, RoutedEventArgs e)
         {
             SwitchToLogin?.Invoke(this, new RoutedEventArgs());
+        }
+
+        public void SwitchToEmployeeView()
+        {
+            SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
         }
     }
 }
