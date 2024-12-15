@@ -47,6 +47,10 @@ namespace CarRentApp.Views.Login
                     // Save the current user to the UserContext
                     _userContext.SetCurrentUser(user);
 
+                    // Clear input fields
+                    EmailTextBox.Text = string.Empty;
+                    PasswordBox.Password = string.Empty;
+
                     // Navigate based on user role
                     switch (user.Role)
                     {
