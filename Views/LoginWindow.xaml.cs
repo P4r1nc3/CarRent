@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using CarRentApp.Data;
 using CarRentApp.Services;
+using CarRentApp.Models;
 
 namespace CarRentApp.Views
 {
@@ -13,6 +15,13 @@ namespace CarRentApp.Views
         {
             InitializeComponent();
             _userService = new UserService(new AppDbContext());
+        }
+
+        private void RegisterHere_Click(object sender, MouseButtonEventArgs e)
+        {
+            var registerWindow = new RegisterWindow();
+            registerWindow.Show();
+            this.Close();
         }
     }
 }
