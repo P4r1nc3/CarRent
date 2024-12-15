@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CarRentApp.Data;
+using CarRentApp.Context;
 using CarRentApp.Models;
 
 namespace CarRentApp.Services
 {
     public class UserService
     {
-        private readonly AppDbContext _dbContext;
+        private readonly DatabaseContext _dbContext;
 
-        public UserService(AppDbContext dbContext)
+        public UserService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }

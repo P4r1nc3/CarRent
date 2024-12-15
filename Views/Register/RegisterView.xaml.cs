@@ -2,7 +2,6 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Context;
-using CarRentApp.Data;
 using CarRentApp.Models;
 using CarRentApp.Services;
 
@@ -19,7 +18,7 @@ namespace CarRentApp.Views.Register
         public RegisterView()
         {
             InitializeComponent();
-            _userService = new UserService(new AppDbContext());
+            _userService = new UserService(new DatabaseContext());
             _userContext = UserContext.GetInstance();
         }
 

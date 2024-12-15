@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CarRentApp.Data;
+using CarRentApp.Context;
 using CarRentApp.Models;
 
 namespace CarRentApp.Services
 {
     public class RequestService
     {
-        private readonly AppDbContext _dbContext;
+        private readonly DatabaseContext _dbContext;
         private readonly UserService _userService;
         private readonly CarService _carService;
 
-        public RequestService(AppDbContext dbContext, UserService userService, CarService carService)
+        public RequestService(DatabaseContext dbContext, UserService userService, CarService carService)
         {
             _dbContext = dbContext;
             _userService = userService;
