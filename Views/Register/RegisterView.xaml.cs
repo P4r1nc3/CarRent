@@ -18,7 +18,7 @@ namespace CarRentApp.Views.Register
         public RegisterView()
         {
             InitializeComponent();
-            _userService = new UserService(new DatabaseContext());
+            _userService = new UserService();
             _userContext = UserContext.GetInstance();
         }
 

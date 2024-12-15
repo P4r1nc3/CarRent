@@ -10,9 +10,9 @@ namespace CarRentApp.Services
     {
         private readonly DatabaseContext _dbContext;
 
-        public CarService(DatabaseContext dbContext)
+        public CarService()
         {
-            _dbContext = dbContext;
+            _dbContext = new DatabaseContext();
         }
 
         public void AddCar(string make, string model, int year, int horsePower, CarState carState)
