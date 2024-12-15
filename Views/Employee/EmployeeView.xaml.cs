@@ -11,6 +11,7 @@ namespace CarRentApp.Views.Employee
     {
         private readonly UserContext _userContext;
         private readonly CarService _carService;
+        private readonly RequestService _requestService;
 
         public event RoutedEventHandler? Logout;
 
@@ -20,10 +21,12 @@ namespace CarRentApp.Views.Employee
             _userContext = UserContext.GetInstance();
             _userContext.CurrentUserChanged += DisplayCurrentUserInfo;
             _carService = new CarService();
+            _requestService = new RequestService();
 
             DisplayCurrentUserInfo();
             LoadCarList();
             LoadCarStates();
+            LoadRequestList();
         }
 
         private void AddCar_Click(object sender, RoutedEventArgs e)
@@ -72,6 +75,54 @@ namespace CarRentApp.Views.Employee
             }
         }
 
+        private void AcceptRequest_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedRequest = RequestsDataGrid.SelectedItem as Request;
+
+            if (selectedRequest == null)
+            {
+                MessageBox.Show("Please select a request to accept.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                _requestService.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
+                                              selectedRequest.StartDate, selectedRequest.EndDate, true);
+                MessageBox.Show("Request accepted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                LoadRequestList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error accepting request: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void RejectRequest_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedRequest = RequestsDataGrid.SelectedItem as Request;
+
+            if (selectedRequest == null)
+            {
+                MessageBox.Show("Please select a request to reject.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                _requestService.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
+                                              selectedRequest.StartDate, selectedRequest.EndDate, false);
+                MessageBox.Show("Request rejected successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                LoadRequestList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error rejecting request: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             _userContext.Logout();
@@ -101,6 +152,11 @@ namespace CarRentApp.Views.Employee
         {
             CarStateComboBox.ItemsSource = System.Enum.GetValues(typeof(CarState)).Cast<CarState>();
             CarStateComboBox.SelectedIndex = 0;
+        }
+
+        private void LoadRequestList()
+        {
+            RequestsDataGrid.ItemsSource = _requestService.GetRequests();
         }
     }
 }
