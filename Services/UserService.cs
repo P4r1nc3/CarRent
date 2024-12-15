@@ -15,7 +15,7 @@ namespace CarRentApp.Services
             _dbContext = dbContext;
         }
 
-        public void AddUser(string name, string surname, string email, string password, Role role)
+        public User AddUser(string name, string surname, string email, string password, Role role)
         {
             if (_dbContext.Users.Any(u => u.Email == email))
             {
@@ -33,6 +33,8 @@ namespace CarRentApp.Services
 
             _dbContext.Users.Add(newUser);
             _dbContext.SaveChanges();
+
+            return newUser;
         }
 
         public User GetUser(int userId)
