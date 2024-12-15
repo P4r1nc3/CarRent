@@ -26,31 +26,6 @@ namespace CarRentApp.Views.Employee
             LoadCarStates();
         }
 
-        private void DisplayCurrentUserInfo()
-        {
-            var currentUser = _userContext.GetCurrentUser();
-
-            if (currentUser != null)
-            {
-                UserInfoTextBlock.Text = $"Logged in as: {currentUser.Name} {currentUser.Surname}";
-            }
-            else
-            {
-                UserInfoTextBlock.Text = "No user is currently logged in.";
-            }
-        }
-
-        private void LoadCarList()
-        {
-            CarDataGrid.ItemsSource = _carService.GetCars();
-        }
-
-        private void LoadCarStates()
-        {
-            CarStateComboBox.ItemsSource = System.Enum.GetValues(typeof(CarState)).Cast<CarState>();
-            CarStateComboBox.SelectedIndex = 0;
-        }
-
         private void AddCar_Click(object sender, RoutedEventArgs e)
         {
             // Retrieve data from input fields
@@ -101,6 +76,31 @@ namespace CarRentApp.Views.Employee
         {
             _userContext.Logout();
             Logout?.Invoke(this, new RoutedEventArgs());
+        }
+
+        private void DisplayCurrentUserInfo()
+        {
+            var currentUser = _userContext.GetCurrentUser();
+
+            if (currentUser != null)
+            {
+                UserInfoTextBlock.Text = $"Logged in as: {currentUser.Name} {currentUser.Surname}";
+            }
+            else
+            {
+                UserInfoTextBlock.Text = "No user is currently logged in.";
+            }
+        }
+
+        private void LoadCarList()
+        {
+            CarDataGrid.ItemsSource = _carService.GetCars();
+        }
+
+        private void LoadCarStates()
+        {
+            CarStateComboBox.ItemsSource = System.Enum.GetValues(typeof(CarState)).Cast<CarState>();
+            CarStateComboBox.SelectedIndex = 0;
         }
     }
 }
