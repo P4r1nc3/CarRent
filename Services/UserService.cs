@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CarRentApp.Data;
+using CarRentApp.Context;
 using CarRentApp.Models;
 
 namespace CarRentApp.Services
 {
     public class UserService
     {
-        private readonly AppDbContext _dbContext;
+        private readonly DatabaseContext _dbContext;
 
-        public UserService(AppDbContext dbContext)
+        public UserService(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public void AddUser(string name, string surname, string email, string password, Role role)
+        public User AddUser(string name, string surname, string email, string password, Role role)
         {
             if (_dbContext.Users.Any(u => u.Email == email))
             {
@@ -33,6 +33,8 @@ namespace CarRentApp.Services
 
             _dbContext.Users.Add(newUser);
             _dbContext.SaveChanges();
+
+            return newUser;
         }
 
         public User GetUser(int userId)
