@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Data;
+using CarRentApp.Context;
 using CarRentApp.Models;
 using CarRentApp.Services;
 
@@ -38,7 +39,10 @@ namespace CarRentApp.Views.Register
             try
             {
                 // Add user to the database
-                _userService.AddUser(firstName, lastName, email, password, Role.Customer);
+                User user = _userService.AddUser(firstName, lastName, email, password, Role.Customer);
+
+                // Set the current user in the UserContext
+                UserContext.Instance.SetCurrentUser(user);
 
                 // Success message
                 MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
