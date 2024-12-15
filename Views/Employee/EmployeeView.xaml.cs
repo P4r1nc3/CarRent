@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using CarRentApp.Context;
 using CarRentApp.Models;
 using CarRentApp.Services;
+using System.Linq;
 
 namespace CarRentApp.Views.Employee
 {
@@ -22,6 +23,7 @@ namespace CarRentApp.Views.Employee
 
             DisplayCurrentUserInfo();
             LoadCarList();
+            LoadCarStates();
         }
 
         private void DisplayCurrentUserInfo()
@@ -43,6 +45,12 @@ namespace CarRentApp.Views.Employee
             CarDataGrid.ItemsSource = _carService.GetCars();
         }
 
+        private void LoadCarStates()
+        {
+            CarStateComboBox.ItemsSource = System.Enum.GetValues(typeof(CarState)).Cast<CarState>();
+            CarStateComboBox.SelectedIndex = 0;
+        }
+
         private void AddCar_Click(object sender, RoutedEventArgs e)
         {
             // Retrieve data from input fields
@@ -50,6 +58,7 @@ namespace CarRentApp.Views.Employee
             var model = ModelTextBox.Text.Trim();
             var yearText = YearTextBox.Text.Trim();
             var horsePowerText = HorsePowerTextBox.Text.Trim();
+            var carState = (CarState)CarStateComboBox.SelectedItem;
 
             // Basic validation
             if (string.IsNullOrEmpty(make) || string.IsNullOrEmpty(model) ||
@@ -68,7 +77,7 @@ namespace CarRentApp.Views.Employee
             try
             {
                 // Add car to the database
-                _carService.AddCar(make, model, year, horsePower, CarState.Available);
+                _carService.AddCar(make, model, year, horsePower, carState);
 
                 // Refresh the car list
                 LoadCarList();
@@ -78,6 +87,7 @@ namespace CarRentApp.Views.Employee
                 ModelTextBox.Clear();
                 YearTextBox.Clear();
                 HorsePowerTextBox.Clear();
+                CarStateComboBox.SelectedIndex = 0;
 
                 MessageBox.Show("Car added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
