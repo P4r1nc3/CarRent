@@ -1,5 +1,6 @@
 using System.Windows;
-using CarRentApp.Views;
+using CarRentApp.Views.Login;
+using CarRentApp.Views.Register;
 
 namespace CarRentApp
 {
