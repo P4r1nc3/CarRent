@@ -46,6 +46,12 @@ namespace CarRentApp.Views.Register
                 // Set the current user in the UserContext
                 _userContext.SetCurrentUser(user);
 
+                // Clear input fields
+                FirstNameTextBox.Text = string.Empty;
+                LastNameTextBox.Text = string.Empty;
+                EmailTextBox.Text = string.Empty;
+                PasswordBox.Password = string.Empty;
+
                 // Success message
                 MessageBox.Show("Account created successfully!\n Now You can login!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
