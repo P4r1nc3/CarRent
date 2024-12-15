@@ -12,11 +12,11 @@ namespace CarRentApp.Services
         private readonly UserService _userService;
         private readonly CarService _carService;
 
-        public RequestService(DatabaseContext dbContext, UserService userService, CarService carService)
+        public RequestService()
         {
-            _dbContext = dbContext;
-            _userService = userService;
-            _carService = carService;
+            _dbContext = new DatabaseContext();
+            _userService = new UserService();
+            _carService = new CarService();
         }
 
         public void CreateRequest(int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
