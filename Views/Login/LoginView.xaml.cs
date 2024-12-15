@@ -12,6 +12,7 @@ namespace CarRentApp.Views.Login
     public partial class LoginView : UserControl
     {
         private readonly UserService _userService;
+        private readonly UserContext _userContext;
 
         public event RoutedEventHandler? SwitchToRegister;
         public event RoutedEventHandler? SwitchToEmployee;
@@ -19,10 +20,11 @@ namespace CarRentApp.Views.Login
         public LoginView()
         {
             InitializeComponent();
-            _userService = new UserService(new DatabaseContext());
+            _userService = new UserService();
+            _userContext = UserContext.GetInstance();
         }
 
-        private void SignIn_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
             var email = EmailTextBox.Text.Trim();
             var password = PasswordBox.Password.Trim();
@@ -43,24 +45,23 @@ namespace CarRentApp.Views.Login
                 if (user != null)
                 {
                     // Save the current user to the UserContext
-                    UserContext.GetInstance().SetCurrentUser(user);
+                    _userContext.SetCurrentUser(user);
 
-                    // Switch to the appropriate view based on user role
-                    if (user.Role == Role.Customer)
+                    // Navigate based on user role
+                    switch (user.Role)
                     {
-                        MessageBox.Show("Customer view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else if (user.Role == Role.Employee)
-                    {
-                        SwitchToEmployeeView();
-                    }
-                    else if (user.Role == Role.Mechanic)
-                    {
-                        MessageBox.Show("Mechanic view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else if (user.Role == Role.Admin)
-                    {
-                        MessageBox.Show("Admin view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                        case Role.Customer:
+                            MessageBox.Show("Customer view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                        case Role.Employee:
+                            SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
+                            break;
+                        case Role.Mechanic:
+                            MessageBox.Show("Mechanic view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                        case Role.Admin:
+                            MessageBox.Show("Admin view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
                     }
                 }
                 else

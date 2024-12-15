@@ -18,11 +18,11 @@ namespace CarRentApp.Views.Register
         public RegisterView()
         {
             InitializeComponent();
-            _userService = new UserService(new DatabaseContext());
+            _userService = new UserService();
             _userContext = UserContext.GetInstance();
         }
 
-        private void SignUp_Click(object sender, RoutedEventArgs e)
+        private void Register_Click(object sender, RoutedEventArgs e)
         {
             // Retrieve user input
             var firstName = FirstNameTextBox.Text.Trim();
@@ -47,10 +47,10 @@ namespace CarRentApp.Views.Register
                 _userContext.SetCurrentUser(user);
 
                 // Success message
-                MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Account created successfully!\n Now You can login!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // Call the method to switch to Employee view
-                SwitchToEmployeeView();
+                SwitchToLogin?.Invoke(this, new RoutedEventArgs());
             }
             catch (InvalidOperationException ex)
             {
