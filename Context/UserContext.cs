@@ -5,31 +5,32 @@ namespace CarRentApp.Context
     public class UserContext
     {
         private static UserContext? _instance;
+        private User? _currentUser;
 
-        public User? CurrentUser { get; private set; }
+        private UserContext() {}
 
-        private UserContext() { }
-
-        public static UserContext Instance
+        public static UserContext GetInstance()
         {
-            get
+            if (_instance == null)
             {
-                if (_instance == null)
-                {
-                    _instance = new UserContext();
-                }
-                return _instance;
+                _instance = new UserContext();
             }
+            return _instance;
         }
 
         public void SetCurrentUser(User user)
         {
-            CurrentUser = user;
+            _currentUser = user;
+        }
+
+        public User? GetCurrentUser()
+        {
+            return _currentUser;
         }
 
         public void Logout()
         {
-            CurrentUser = null;
+            _currentUser = null;
         }
     }
 }
