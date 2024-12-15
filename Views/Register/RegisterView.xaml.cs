@@ -22,7 +22,7 @@ namespace CarRentApp.Views.Register
             _userContext = UserContext.GetInstance();
         }
 
-        private void SignUp_Click(object sender, RoutedEventArgs e)
+        private void Register_Click(object sender, RoutedEventArgs e)
         {
             // Retrieve user input
             var firstName = FirstNameTextBox.Text.Trim();

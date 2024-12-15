@@ -22,7 +22,7 @@ namespace CarRentApp.Views.Login
             _userService = new UserService(new DatabaseContext());
         }
 
-        private void SignIn_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
             var email = EmailTextBox.Text.Trim();
             var password = PasswordBox.Password.Trim();
