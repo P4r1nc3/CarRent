@@ -45,22 +45,21 @@ namespace CarRentApp.Views.Login
                     // Save the current user to the UserContext
                     UserContext.GetInstance().SetCurrentUser(user);
 
-                    // Switch to the appropriate view based on user role
-                    if (user.Role == Role.Customer)
+                    // Navigate based on user role
+                    switch (user.Role)
                     {
-                        MessageBox.Show("Customer view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else if (user.Role == Role.Employee)
-                    {
-                        SwitchToEmployeeView();
-                    }
-                    else if (user.Role == Role.Mechanic)
-                    {
-                        MessageBox.Show("Mechanic view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else if (user.Role == Role.Admin)
-                    {
-                        MessageBox.Show("Admin view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                        case Role.Customer:
+                            MessageBox.Show("Customer view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                        case Role.Employee:
+                            SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
+                            break;
+                        case Role.Mechanic:
+                            MessageBox.Show("Mechanic view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                        case Role.Admin:
+                            MessageBox.Show("Admin view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
                     }
                 }
                 else
