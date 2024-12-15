@@ -47,10 +47,10 @@ namespace CarRentApp.Views.Register
                 _userContext.SetCurrentUser(user);
 
                 // Success message
-                MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Account created successfully!\n Now You can login!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // Call the method to switch to Employee view
-                SwitchToEmployeeView();
+                SwitchToLogin?.Invoke(this, new RoutedEventArgs());
             }
             catch (InvalidOperationException ex)
             {
