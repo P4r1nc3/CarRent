@@ -53,7 +53,12 @@
 
 							<!-- Car List -->
 							<TextBlock Text="Car List" FontSize="20" FontWeight="Bold" Margin="0,20,0,10"/>
-							<DataGrid x:Name="CarDataGrid" AutoGenerateColumns="True" Height="250" />
+							<DataGrid x:Name="CarDataGrid" 
+									  AutoGenerateColumns="True" 
+									  Height="250"
+									  IsReadOnly="True"
+									  CanUserAddRows="False"
+									  CanUserDeleteRows="False"/>
 						</StackPanel>
 					</Grid>
 				</TabItem>
