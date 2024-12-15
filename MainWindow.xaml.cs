@@ -1,6 +1,7 @@
 using System.Windows;
 using CarRentApp.Views.Login;
 using CarRentApp.Views.Register;
+using CarRentApp.Views.Employee;
 
 namespace CarRentApp
 {
@@ -13,10 +14,13 @@ namespace CarRentApp
             // Initialize views
             var loginView = new LoginView();
             var registerView = new RegisterView();
+            var employeeView = new EmployeeView();
 
-            // Event handlers as lambdas
+            // Event handlers
             loginView.SwitchToRegister += (_, __) => MainContent.Content = registerView;
             registerView.SwitchToLogin += (_, __) => MainContent.Content = loginView;
+            registerView.SwitchToEmployee += (_, __) => MainContent.Content = employeeView;
+            employeeView.Logout += (_, __) => MainContent.Content = loginView;
 
             // Set initial view
             MainContent.Content = loginView;
