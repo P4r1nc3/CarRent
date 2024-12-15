@@ -6,17 +6,20 @@ namespace CarRentApp.Views.Employee
 {
     public partial class EmployeeView : UserControl
     {
+        private readonly UserContext _userContext;
+
         public event RoutedEventHandler? Logout;
 
         public EmployeeView()
         {
+            _userContext = UserContext.GetInstance();
             InitializeComponent();
             DisplayCurrentUserInfo();
         }
 
         private void DisplayCurrentUserInfo()
         {
-            var currentUser = UserContext.Instance.CurrentUser;
+            var currentUser = _userContext.GetCurrentUser();
 
             if (currentUser != null)
             {
@@ -33,7 +36,7 @@ namespace CarRentApp.Views.Employee
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             // Log out the current user
-            UserContext.Instance.Logout();
+            _userContext.Logout();
 
             // Trigger logout event to navigate back to login view
             Logout?.Invoke(this, new RoutedEventArgs());

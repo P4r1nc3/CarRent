@@ -11,6 +11,7 @@ namespace CarRentApp.Views.Register
     public partial class RegisterView : UserControl
     {
         private readonly UserService _userService;
+        private readonly UserContext _userContext;
 
         public event RoutedEventHandler? SwitchToLogin;
         public event RoutedEventHandler? SwitchToEmployee;
@@ -19,6 +20,7 @@ namespace CarRentApp.Views.Register
         {
             InitializeComponent();
             _userService = new UserService(new AppDbContext());
+            _userContext = UserContext.GetInstance();
         }
 
         private void SignUp_Click(object sender, RoutedEventArgs e)
@@ -43,7 +45,7 @@ namespace CarRentApp.Views.Register
                 User user = _userService.AddUser(firstName, lastName, email, password, Role.Customer);
 
                 // Set the current user in the UserContext
-                UserContext.Instance.SetCurrentUser(user);
+                _userContext.SetCurrentUser(user);
 
                 // Success message
                 MessageBox.Show("Account created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
