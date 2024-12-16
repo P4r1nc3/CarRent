@@ -5,7 +5,7 @@ using System.Windows.Input;
 using CarRentApp.Models;
 using CarRentApp.Services;
 
-namespace CarRentApp.Views.Login
+namespace CarRentApp.Views.Auth.Login
 {
     public partial class LoginView : UserControl
     {
