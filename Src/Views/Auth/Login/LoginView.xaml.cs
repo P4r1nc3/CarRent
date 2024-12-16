@@ -9,13 +9,13 @@ namespace CarRentApp.Views.Auth.Login
 {
     public partial class LoginView : UserControl
     {
-        private readonly LoginService _loginService;
-
         public event RoutedEventHandler? SwitchToRegister;
         public event RoutedEventHandler? SwitchToAdmin;
-        public event RoutedEventHandler? SwitchToMechanic;
         public event RoutedEventHandler? SwitchToCustomer;
         public event RoutedEventHandler? SwitchToEmployee;
+        public event RoutedEventHandler? SwitchToMechanic;
+
+        private readonly LoginService _loginService;
 
         public LoginView()
         {
@@ -42,14 +42,14 @@ namespace CarRentApp.Views.Auth.Login
                         case Role.Admin:
                             SwitchToAdmin?.Invoke(this, new RoutedEventArgs());
                             break;
-                        case Role.Mechanic:
-                            SwitchToMechanic?.Invoke(this, new RoutedEventArgs());
-                            break;
                         case Role.Customer:
                             SwitchToCustomer?.Invoke(this, new RoutedEventArgs());
                             break;
                         case Role.Employee:
                             SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
+                            break;
+                        case Role.Mechanic:
+                            SwitchToMechanic?.Invoke(this, new RoutedEventArgs());
                             break;
                     }
                 }
