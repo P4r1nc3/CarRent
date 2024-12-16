@@ -1,10 +1,10 @@
 using System.Windows;
-using CarRentApp.Views.Customer;
-using CarRentApp.Views.Employee;
-using CarRentApp.Views.Login;
-using CarRentApp.Views.Register;
-using CarRentApp.Views.Mechanic;
-using CarRentApp.Views.Admin;
+using CarRentApp.Views.Auth.Register;
+using CarRentApp.Views.Auth.Login;
+using CarRentApp.Views.Users.Admin;
+using CarRentApp.Views.Users.Mechanic;
+using CarRentApp.Views.Users.Customer;
+using CarRentApp.Views.Users.Employee;
 
 namespace CarRentApp
 {

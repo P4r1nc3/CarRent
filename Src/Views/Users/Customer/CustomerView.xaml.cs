@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Contexts;
 
-namespace CarRentApp.Views.Customer
+namespace CarRentApp.Views.Users.Customer
 {
     public partial class CustomerView : UserControl
     {
