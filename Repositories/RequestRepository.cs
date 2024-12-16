@@ -4,25 +4,25 @@ using System.Linq;
 using CarRentApp.Context;
 using CarRentApp.Models;
 
-namespace CarRentApp.Services
+namespace CarRentApp.Repositories
 {
-    public class RequestService
+    public class RequestRepository
     {
         private readonly DatabaseContext _dbContext;
-        private readonly UserService _userService;
-        private readonly CarService _carService;
+        private readonly UserRepository _userRepository;
+        private readonly CarRepository _carRepository;
 
-        public RequestService()
+        public RequestRepository()
         {
             _dbContext = new DatabaseContext();
-            _userService = new UserService();
-            _carService = new CarService();
+            _userRepository = new UserRepository();
+            _carRepository = new CarRepository();
         }
 
         public void CreateRequest(int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
         {
-            var car = _carService.GetCar(carId);
-            var user = _userService.GetUser(userId);
+            var car = _carRepository.GetCar(carId);
+            var user = _userRepository.GetUser(userId);
 
             var newRequest = new Request
             {
