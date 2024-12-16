@@ -42,14 +42,14 @@ namespace CarRentApp.Views.Auth.Login
                         case Role.Admin:
                             SwitchToAdmin?.Invoke(this, new RoutedEventArgs());
                             break;
-                        case Role.Mechanic:
-                            SwitchToMechanic?.Invoke(this, new RoutedEventArgs());
-                            break;
                         case Role.Customer:
                             SwitchToCustomer?.Invoke(this, new RoutedEventArgs());
                             break;
                         case Role.Employee:
                             SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
+                            break;
+                        case Role.Mechanic:
+                            SwitchToMechanic?.Invoke(this, new RoutedEventArgs());
                             break;
                     }
                 }
