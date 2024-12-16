@@ -9,15 +9,13 @@
                        FontSize="32"
                        FontWeight="Bold"
                        Foreground="#333"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,20" />
+                       HorizontalAlignment="Center" />
 
             <!-- User Info -->
             <TextBlock x:Name="UserInfoTextBlock"
                        FontSize="18"
                        Foreground="#555"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,20" />
+                       HorizontalAlignment="Center" />
 
             <!-- Logout Button -->
             <Button Content="Logout"
