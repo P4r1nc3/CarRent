@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CarRentApp.Context;
 using CarRentApp.Models;
 using CarRentApp.Services;
 
@@ -11,8 +9,7 @@ namespace CarRentApp.Views.Login
 {
     public partial class LoginView : UserControl
     {
-        private readonly UserService _userService;
-        private readonly UserContext _userContext;
+        private readonly LoginService _loginService;
 
         public event RoutedEventHandler? SwitchToRegister;
         public event RoutedEventHandler? SwitchToEmployee;
@@ -20,38 +17,23 @@ namespace CarRentApp.Views.Login
         public LoginView()
         {
             InitializeComponent();
-            _userService = new UserService();
-            _userContext = UserContext.GetInstance();
+            _loginService = new LoginService();
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var email = EmailTextBox.Text.Trim();
-            var password = PasswordBox.Password.Trim();
-
-            // Validate input fields
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("Please enter both email and password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             try
             {
-                // Verify user credentials
-                var user = _userService.GetUsers()
-                    .FirstOrDefault(u => u.Email == email && u.Password == password);
+                var user = _loginService.LoginUser(
+                    EmailTextBox.Text.Trim(), 
+                    PasswordBox.Password.Trim());
 
                 if (user != null)
                 {
-                    // Save the current user to the UserContext
-                    _userContext.SetCurrentUser(user);
-
                     // Clear input fields
-                    EmailTextBox.Text = string.Empty;
-                    PasswordBox.Password = string.Empty;
+                    ClearForm();
 
-                    // Navigate based on user role
+                    // Navigate based on role
                     switch (user.Role)
                     {
                         case Role.Customer:
@@ -73,6 +55,10 @@ namespace CarRentApp.Views.Login
                     MessageBox.Show("Invalid email or password. Please try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -84,9 +70,10 @@ namespace CarRentApp.Views.Login
             SwitchToRegister?.Invoke(this, new RoutedEventArgs());
         }
 
-        public void SwitchToEmployeeView()
+        private void ClearForm()
         {
-            SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
+            EmailTextBox.Text = string.Empty;
+            PasswordBox.Password = string.Empty;
         }
     }
 }

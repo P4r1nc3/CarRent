@@ -4,13 +4,13 @@ using System.Linq;
 using CarRentApp.Context;
 using CarRentApp.Models;
 
-namespace CarRentApp.Services
+namespace CarRentApp.Repositories
 {
-    public class UserService
+    public class UserRepository
     {
         private readonly DatabaseContext _dbContext;
 
-        public UserService()
+        public UserRepository()
         {
             _dbContext = new DatabaseContext();
         }

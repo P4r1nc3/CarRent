@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Context;
 using CarRentApp.Models;
-using CarRentApp.Services;
+using CarRentApp.Repositories;
 using System.Linq;
 
 namespace CarRentApp.Views.Employee
@@ -10,8 +10,8 @@ namespace CarRentApp.Views.Employee
     public partial class EmployeeView : UserControl
     {
         private readonly UserContext _userContext;
-        private readonly CarService _carService;
-        private readonly RequestService _requestService;
+        private readonly CarRepository _carRepository;
+        private readonly RequestRepository _requestRepository;
 
         public event RoutedEventHandler? Logout;
 
@@ -19,11 +19,11 @@ namespace CarRentApp.Views.Employee
         {
             InitializeComponent();
             _userContext = UserContext.GetInstance();
-            _userContext.CurrentUserChanged += DisplayCurrentUserInfo;
-            _carService = new CarService();
-            _requestService = new RequestService();
+            _userContext.CurrentUserChanged += LoadUserInfo;
+            _carRepository = new CarRepository();
+            _requestRepository = new RequestRepository();
 
-            DisplayCurrentUserInfo();
+            LoadUserInfo();
             LoadCarList();
             LoadCarStates();
             LoadRequestList();
@@ -55,7 +55,7 @@ namespace CarRentApp.Views.Employee
             try
             {
                 // Add car to the database
-                _carService.AddCar(make, model, year, horsePower, carState);
+                _carRepository.AddCar(make, model, year, horsePower, carState);
 
                 // Refresh the car list
                 LoadCarList();
@@ -87,7 +87,7 @@ namespace CarRentApp.Views.Employee
 
             try
             {
-                _requestService.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
+                _requestRepository.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
                                               selectedRequest.StartDate, selectedRequest.EndDate, true);
                 MessageBox.Show("Request accepted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -111,7 +111,7 @@ namespace CarRentApp.Views.Employee
 
             try
             {
-                _requestService.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
+                _requestRepository.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
                                               selectedRequest.StartDate, selectedRequest.EndDate, false);
                 MessageBox.Show("Request rejected successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -129,7 +129,7 @@ namespace CarRentApp.Views.Employee
             Logout?.Invoke(this, new RoutedEventArgs());
         }
 
-        private void DisplayCurrentUserInfo()
+        private void LoadUserInfo()
         {
             var currentUser = _userContext.GetCurrentUser();
 
@@ -145,7 +145,7 @@ namespace CarRentApp.Views.Employee
 
         private void LoadCarList()
         {
-            CarDataGrid.ItemsSource = _carService.GetCars();
+            CarDataGrid.ItemsSource = _carRepository.GetCars();
         }
 
         private void LoadCarStates()
@@ -156,7 +156,7 @@ namespace CarRentApp.Views.Employee
 
         private void LoadRequestList()
         {
-            RequestsDataGrid.ItemsSource = _requestService.GetRequests();
+            RequestsDataGrid.ItemsSource = _requestRepository.GetRequests();
         }
     }
 }
