@@ -12,6 +12,7 @@ namespace CarRentApp.Views.Login
         private readonly LoginService _loginService;
 
         public event RoutedEventHandler? SwitchToRegister;
+        public event RoutedEventHandler? SwitchToCustomer;
         public event RoutedEventHandler? SwitchToEmployee;
 
         public LoginView()
@@ -37,7 +38,7 @@ namespace CarRentApp.Views.Login
                     switch (user.Role)
                     {
                         case Role.Customer:
-                            MessageBox.Show("Customer view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            SwitchToCustomer?.Invoke(this, new RoutedEventArgs());
                             break;
                         case Role.Employee:
                             SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
