@@ -19,6 +19,7 @@ namespace CarRentApp.Views.Customer
             LoadUserInfo();
         }
 
+        // TODO move this somewhere to not duplicate the login in all user views
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             _authContext.Logout();
