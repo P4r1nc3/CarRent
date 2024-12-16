@@ -1,9 +1,10 @@
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Contexts;
 using CarRentApp.Models;
 using CarRentApp.Repositories;
-using System.Linq;
 
 namespace CarRentApp.Views.Employee
 {
@@ -18,8 +19,10 @@ namespace CarRentApp.Views.Employee
         public EmployeeView()
         {
             InitializeComponent();
+
             _authContext = AuthContext.GetInstance();
             _authContext.CurrentUserChanged += LoadUserInfo;
+
             _carRepository = new CarRepository();
             _requestRepository = new RequestRepository();
 
@@ -54,22 +57,14 @@ namespace CarRentApp.Views.Employee
 
             try
             {
-                // Add car to the database
                 _carRepository.AddCar(make, model, year, horsePower, carState);
 
-                // Refresh the car list
                 LoadCarList();
-
-                // Clear input fields
-                MakeTextBox.Clear();
-                ModelTextBox.Clear();
-                YearTextBox.Clear();
-                HorsePowerTextBox.Clear();
-                CarStateComboBox.SelectedIndex = 0;
+                ClearCarForm();
 
                 MessageBox.Show("Car added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -87,15 +82,36 @@ namespace CarRentApp.Views.Employee
 
             try
             {
-                _requestRepository.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
-                                              selectedRequest.StartDate, selectedRequest.EndDate, true);
-                MessageBox.Show("Request accepted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Update request status to "Accepted"
+                _requestRepository.UpdateRequest(
+                    selectedRequest.Id,
+                    selectedRequest.CarId,
+                    selectedRequest.UserId,
+                    selectedRequest.StartDate,
+                    selectedRequest.EndDate,
+                    true);
+
+                // Update car state to "Reserved"
+                var car = _carRepository.GetCar(selectedRequest.CarId);
+                if (car != null)
+                {
+                    _carRepository.UpdateCar(
+                        car.Id,
+                        car.Make,
+                        car.Model,
+                        car.Year,
+                        car.HorsePower,
+                        CarState.Reserved);
+                }
 
                 LoadRequestList();
+                LoadCarList();
+
+                MessageBox.Show("Request accepted and car state updated to Reserved!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error accepting request: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -111,15 +127,20 @@ namespace CarRentApp.Views.Employee
 
             try
             {
-                _requestRepository.UpdateRequest(selectedRequest.Id, selectedRequest.CarId, selectedRequest.UserId,
-                                              selectedRequest.StartDate, selectedRequest.EndDate, false);
-                MessageBox.Show("Request rejected successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                _requestRepository.UpdateRequest(
+                    selectedRequest.Id,
+                    selectedRequest.CarId,
+                    selectedRequest.UserId,
+                    selectedRequest.StartDate,
+                    selectedRequest.EndDate,
+                    false);
 
                 LoadRequestList();
+                MessageBox.Show("Request rejected successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error rejecting request: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -132,15 +153,9 @@ namespace CarRentApp.Views.Employee
         private void LoadUserInfo()
         {
             var currentUser = _authContext.GetCurrentUser();
-
-            if (currentUser != null)
-            {
-                UserInfoTextBlock.Text = $"Logged in as: {currentUser.Name} {currentUser.Surname}";
-            }
-            else
-            {
-                UserInfoTextBlock.Text = "No user is currently logged in.";
-            }
+            UserInfoTextBlock.Text = currentUser != null
+                ? $"Logged in as: {currentUser.Name} {currentUser.Surname}"
+                : "No user is currently logged in.";
         }
 
         private void LoadCarList()
@@ -157,6 +172,15 @@ namespace CarRentApp.Views.Employee
         private void LoadRequestList()
         {
             RequestsDataGrid.ItemsSource = _requestRepository.GetRequests();
+        }
+
+        private void ClearCarForm()
+        {
+            MakeTextBox.Clear();
+            ModelTextBox.Clear();
+            YearTextBox.Clear();
+            HorsePowerTextBox.Clear();
+            CarStateComboBox.SelectedIndex = 0;
         }
     }
 }
