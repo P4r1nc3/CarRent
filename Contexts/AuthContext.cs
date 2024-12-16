@@ -1,22 +1,22 @@
 using CarRentApp.Models;
 using System;
 
-namespace CarRentApp.Context
+namespace CarRentApp.Contexts
 {
-    public class UserContext
+    public class AuthContext
     {
-        private static UserContext? _instance;
+        private static AuthContext? _instance;
         private User? _currentUser;
 
         public event Action? CurrentUserChanged;
 
-        private UserContext() { }
+        private AuthContext() { }
 
-        public static UserContext GetInstance()
+        public static AuthContext GetInstance()
         {
             if (_instance == null)
             {
-                _instance = new UserContext();
+                _instance = new AuthContext();
             }
             return _instance;
         }

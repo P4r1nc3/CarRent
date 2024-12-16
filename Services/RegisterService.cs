@@ -1,5 +1,5 @@
 using System;
-using CarRentApp.Context;
+using CarRentApp.Contexts;
 using CarRentApp.Models;
 using CarRentApp.Repositories;
 
@@ -8,12 +8,12 @@ namespace CarRentApp.Services
     public class RegisterService
     {
         private readonly UserRepository _userRepository;
-        private readonly UserContext _userContext;
+        private readonly AuthContext _authContext;
 
         public RegisterService()
         {
             _userRepository = new UserRepository();
-            _userContext = UserContext.GetInstance();
+            _authContext = AuthContext.GetInstance();
         }
 
         public User RegisterUser(string firstName, string lastName, string email, string password)
@@ -28,7 +28,7 @@ namespace CarRentApp.Services
             var user = _userRepository.AddUser(firstName, lastName, email, password, Role.Customer);
 
             // Set the new user in the UserContext
-            _userContext.SetCurrentUser(user);
+            _authContext.SetCurrentUser(user);
 
             return user;
         }

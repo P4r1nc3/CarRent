@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using CarRentApp.Context;
+using CarRentApp.Contexts;
 using CarRentApp.Models;
 using CarRentApp.Repositories;
 
@@ -10,7 +10,7 @@ namespace CarRentApp.Services
     {
         private readonly CarRepository _carRepository;
         private readonly RequestRepository _requestRepository;
-        private readonly UserContext _userContext;
+        private readonly AuthContext _authContext;
 
         public event Action? CurrentUserChanged;
 
@@ -18,9 +18,9 @@ namespace CarRentApp.Services
         {
             _carRepository = new CarRepository();
             _requestRepository = new RequestRepository();
-            _userContext = UserContext.GetInstance();
+            _authContext = AuthContext.GetInstance();
 
-            _userContext.CurrentUserChanged += OnCurrentUserChanged;
+            _authContext.CurrentUserChanged += OnCurrentUserChanged;
         }
 
         private void OnCurrentUserChanged()
@@ -30,12 +30,12 @@ namespace CarRentApp.Services
 
         public User? GetCurrentUser()
         {
-            return _userContext.GetCurrentUser();
+            return _authContext.GetCurrentUser();
         }
 
         public void LogoutUser()
         {
-            _userContext.Logout();
+            _authContext.Logout();
         }
 
         public List<Car> GetAllCars()
