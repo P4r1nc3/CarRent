@@ -1,7 +1,7 @@
 using CarRentApp.Models;
 using System;
 
-namespace CarRentApp.Context
+namespace CarRentApp.Contexts
 {
     public class UserContext
     {
