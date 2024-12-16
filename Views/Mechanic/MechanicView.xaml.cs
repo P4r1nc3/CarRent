@@ -2,15 +2,15 @@ using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Contexts;
 
-namespace CarRentApp.Views.Customer
+namespace CarRentApp.Views.Mechanic
 {
-    public partial class CustomerView : UserControl
+    public partial class MechanicView : UserControl
     {
         private readonly AuthContext _authContext;
 
         public event RoutedEventHandler? Logout;
 
-        public CustomerView()
+        public MechanicView()
         {
             InitializeComponent();
             _authContext = AuthContext.GetInstance();
