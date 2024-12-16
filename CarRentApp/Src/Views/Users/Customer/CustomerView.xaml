@@ -5,15 +5,16 @@
 	<DockPanel>
 		<!-- Navigation Bar -->
 		<Grid DockPanel.Dock="Top" Background="#0078D7" Height="50">
-			<!-- Define two columns: Left for the title, Right for the logout button -->
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
-				<!-- Left column: takes all available space -->
+				<!-- Title -->
 				<ColumnDefinition Width="Auto" />
-				<!-- Right column: adjusts to content -->
+				<!-- Account Button -->
+				<ColumnDefinition Width="Auto" />
+				<!-- Logout Button -->
 			</Grid.ColumnDefinitions>
 
-			<!-- Title aligned to the left -->
+			<!-- Title -->
 			<TextBlock Text="CarRent"
                        Foreground="White"
                        FontSize="20"
@@ -23,7 +24,20 @@
                        Margin="10,0,0,0"
                        Grid.Column="0"/>
 
-			<!-- Logout button aligned to the right -->
+			<!-- Account Button -->
+			<Button Content="Account"
+                    Width="100"
+                    Height="30"
+                    Background="White"
+                    Foreground="#0078D7"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,10,0"
+                    Click="Account_Click"
+                    Grid.Column="1"/>
+
+			<!-- Logout Button -->
 			<Button Content="Logout"
                     Width="100"
                     Height="30"
@@ -34,7 +48,7 @@
                     HorizontalAlignment="Right"
                     Margin="0,0,10,0"
                     Click="Logout_Click"
-                    Grid.Column="1"/>
+                    Grid.Column="2"/>
 		</Grid>
 
 		<!-- Main content area -->
@@ -42,13 +56,7 @@
 			<!-- View showing the list of cars -->
 			<Grid x:Name="MainView" Visibility="Visible">
 				<StackPanel VerticalAlignment="Top" Margin="20" Width="1200" HorizontalAlignment="Center">
-					<!-- User Info -->
-					<TextBlock x:Name="UserInfoTextBlock"
-                               FontSize="18"
-                               Foreground="#555"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               Margin="0,10,0,20" />
+					<!-- Removed UserInfoTextBlock -->
 
 					<!-- Car list displayed as cards -->
 					<ScrollViewer Height="600">
@@ -61,14 +69,11 @@
 
 			<!-- View showing car details -->
 			<Grid x:Name="CarDetailView" Visibility="Collapsed">
-				<!-- Back button -->
 				<Button Content="Back"
                         HorizontalAlignment="Left"
                         Margin="10"
                         Width="100"
                         Click="BackToMainView_Click" />
-
-				<!-- Car detail information -->
 				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 					<TextBlock x:Name="CarDetailTitle"
                                FontSize="28"

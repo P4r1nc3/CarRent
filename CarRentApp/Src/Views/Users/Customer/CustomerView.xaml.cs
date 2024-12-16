@@ -16,8 +16,8 @@ namespace CarRentApp.Views.Users.Customer
         private readonly AuthContext _authContext;
         private readonly CarRepository _carRepository;
 
-        private List<Car> _cars; // Lista samochodów
-        private Car _selectedCar; // Wybrany samochód
+        private List<Car> _cars; // List of cars
+        private Car _selectedCar; // Selected car
 
         public CustomerView()
         {
@@ -25,23 +25,11 @@ namespace CarRentApp.Views.Users.Customer
             _authContext = AuthContext.GetInstance();
             _carRepository = new CarRepository();
 
-            _authContext.CurrentUserChanged += LoadUserInfo;
-
-            LoadUserInfo();
             LoadCars();
-        }
-
-        private void LoadUserInfo()
-        {
-            var currentUser = _authContext.GetCurrentUser();
-            UserInfoTextBlock.Text = currentUser != null
-                ? $"Logged in as: {currentUser.Name} {currentUser.Surname}"
-                : "No user is currently logged in.";
         }
 
         private void LoadCars()
         {
-            // Pobranie samochodów z bazy danych
             _cars = _carRepository.GetCars();
 
             foreach (var car in _cars)
@@ -73,10 +61,10 @@ namespace CarRentApp.Views.Users.Customer
                     BorderBrush = Brushes.LightGray,
                     Margin = new Thickness(10),
                     Padding = new Thickness(5),
-                    Tag = car // Przypisanie obiektu samochodu do przycisku
+                    Tag = car
                 };
 
-                carCard.Click += CarCard_Click; // Obs³uga klikniêcia samochodu
+                carCard.Click += CarCard_Click;
                 CarsGrid.Children.Add(carCard);
             }
         }
@@ -89,7 +77,6 @@ namespace CarRentApp.Views.Users.Customer
             {
                 _selectedCar = car;
 
-                // Prze³¹czenie widoku na szczegó³y samochodu
                 MainView.Visibility = Visibility.Collapsed;
                 CarDetailView.Visibility = Visibility.Visible;
 
@@ -100,7 +87,6 @@ namespace CarRentApp.Views.Users.Customer
 
         private void BackToMainView_Click(object sender, RoutedEventArgs e)
         {
-            // Powrót do widoku g³ównego
             CarDetailView.Visibility = Visibility.Collapsed;
             MainView.Visibility = Visibility.Visible;
         }
@@ -109,6 +95,20 @@ namespace CarRentApp.Views.Users.Customer
         {
             _authContext.Logout();
             Logout?.Invoke(this, new RoutedEventArgs());
+        }
+
+        private void Account_Click(object sender, RoutedEventArgs e)
+        {
+            var currentUser = _authContext.GetCurrentUser();
+            if (currentUser != null)
+            {
+                MessageBox.Show($"Name: {currentUser.Name}\nSurname: {currentUser.Surname}\nEmail: {currentUser.Email}",
+                                "User Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("No user information available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
