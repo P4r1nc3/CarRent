@@ -1,17 +1,13 @@
 <UserControl x:Class="CarRentApp.Views.Users.Customer.CustomerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<!-- The main layout container -->
+	<!-- Main layout container -->
 	<DockPanel>
 		<!-- Navigation Bar -->
 		<Grid DockPanel.Dock="Top" Background="#0078D7" Height="50">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
-				<!-- Title -->
 				<ColumnDefinition Width="Auto" />
-				<!-- Account Button -->
-				<ColumnDefinition Width="Auto" />
-				<!-- Logout Button -->
 			</Grid.ColumnDefinitions>
 
 			<!-- Title -->
@@ -23,19 +19,6 @@
                        HorizontalAlignment="Left"
                        Margin="10,0,0,0"
                        Grid.Column="0"/>
-
-			<!-- Account Button -->
-			<Button Content="Account"
-                    Width="100"
-                    Height="30"
-                    Background="White"
-                    Foreground="#0078D7"
-                    FontWeight="Bold"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,10,0"
-                    Click="Account_Click"
-                    Grid.Column="1"/>
 
 			<!-- Logout Button -->
 			<Button Content="Logout"
@@ -56,8 +39,6 @@
 			<!-- View showing the list of cars -->
 			<Grid x:Name="MainView" Visibility="Visible">
 				<StackPanel VerticalAlignment="Top" Margin="20" Width="1200" HorizontalAlignment="Center">
-					<!-- Removed UserInfoTextBlock -->
-
 					<!-- Car list displayed as cards -->
 					<ScrollViewer Height="600">
 						<UniformGrid x:Name="CarsGrid" Columns="4" Margin="10">
@@ -67,25 +48,48 @@
 				</StackPanel>
 			</Grid>
 
-			<!-- View showing car details -->
+			<!-- View showing car details and reservation -->
 			<Grid x:Name="CarDetailView" Visibility="Collapsed">
+				<!-- Back button -->
 				<Button Content="Back"
                         HorizontalAlignment="Left"
                         Margin="10"
                         Width="100"
                         Click="BackToMainView_Click" />
-				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+				<!-- Car detail information -->
+				<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
+					<!-- Car Title -->
 					<TextBlock x:Name="CarDetailTitle"
                                FontSize="28"
                                FontWeight="Bold"
                                Foreground="#333"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,20"/>
+
+					<!-- Car Description -->
 					<TextBlock x:Name="CarDetailDescription"
                                FontSize="18"
                                Foreground="#555"
                                TextAlignment="Center"
                                Margin="0,10"/>
+
+					<!-- Reservation Section -->
+					<TextBlock Text="Select Start Date:" Margin="0,20,0,5" FontSize="16" FontWeight="Bold" />
+					<DatePicker x:Name="StartDatePicker" SelectedDateChanged="DatePicker_SelectionChanged" />
+
+					<TextBlock Text="Select End Date:" Margin="0,10,0,5" FontSize="16" FontWeight="Bold" />
+					<DatePicker x:Name="EndDatePicker" SelectedDateChanged="DatePicker_SelectionChanged" />
+
+					<!-- Reserve Button -->
+					<Button Content="Reserve"
+                            Width="150"
+                            Margin="0,20,0,0"
+                            Background="#0078D7"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            Click="ReserveButton_Click" />
 				</StackPanel>
 			</Grid>
 		</Grid>

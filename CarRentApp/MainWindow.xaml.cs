@@ -48,7 +48,7 @@ namespace CarRentApp
   
 
             // Set initial content
-            MainContent.Content = _loginView;
+            MainContent.Content = _customerView;
         }
     }
 }
