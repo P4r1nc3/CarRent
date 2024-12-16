@@ -9,13 +9,13 @@ namespace CarRentApp.Views.Auth.Login
 {
     public partial class LoginView : UserControl
     {
-        private readonly LoginService _loginService;
-
         public event RoutedEventHandler? SwitchToRegister;
         public event RoutedEventHandler? SwitchToAdmin;
-        public event RoutedEventHandler? SwitchToMechanic;
         public event RoutedEventHandler? SwitchToCustomer;
         public event RoutedEventHandler? SwitchToEmployee;
+        public event RoutedEventHandler? SwitchToMechanic;
+
+        private readonly LoginService _loginService;
 
         public LoginView()
         {

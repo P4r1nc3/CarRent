@@ -9,14 +9,14 @@ namespace CarRentApp.Repositories
     public class RequestRepository
     {
         private readonly DatabaseContext _dbContext;
-        private readonly UserRepository _userRepository;
         private readonly CarRepository _carRepository;
-
+        private readonly UserRepository _userRepository;
+     
         public RequestRepository()
         {
             _dbContext = new DatabaseContext();
-            _userRepository = new UserRepository();
             _carRepository = new CarRepository();
+            _userRepository = new UserRepository();
         }
 
         public void CreateRequest(int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)

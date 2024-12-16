@@ -6,9 +6,9 @@ namespace CarRentApp.Views.Users.Admin
 {
     public partial class AdminView : UserControl
     {
-        private readonly AuthContext _authContext;
-
         public event RoutedEventHandler? Logout;
+
+        private readonly AuthContext _authContext;
 
         public AdminView()
         {
