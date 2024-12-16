@@ -9,7 +9,7 @@ namespace CarRentApp.Views.Employee
 {
     public partial class EmployeeView : UserControl
     {
-        private readonly UserContext _userContext;
+        private readonly AuthContext _authContext;
         private readonly CarRepository _carRepository;
         private readonly RequestRepository _requestRepository;
 
@@ -18,8 +18,8 @@ namespace CarRentApp.Views.Employee
         public EmployeeView()
         {
             InitializeComponent();
-            _userContext = UserContext.GetInstance();
-            _userContext.CurrentUserChanged += LoadUserInfo;
+            _authContext = AuthContext.GetInstance();
+            _authContext.CurrentUserChanged += LoadUserInfo;
             _carRepository = new CarRepository();
             _requestRepository = new RequestRepository();
 
@@ -125,13 +125,13 @@ namespace CarRentApp.Views.Employee
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            _userContext.Logout();
+            _authContext.Logout();
             Logout?.Invoke(this, new RoutedEventArgs());
         }
 
         private void LoadUserInfo()
         {
-            var currentUser = _userContext.GetCurrentUser();
+            var currentUser = _authContext.GetCurrentUser();
 
             if (currentUser != null)
             {
