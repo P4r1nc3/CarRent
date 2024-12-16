@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using CarRentApp.Models;
 using System;
 
-namespace CarRentApp.Context
+namespace CarRentApp.Contexts
 {
     public class DatabaseContext : DbContext
     {
