@@ -3,8 +3,8 @@ namespace CarRentApp.Models
     public enum Role
     {
         Admin,
-        Mechanic,
+        Customer,
         Employee,
-        Customer
+        Mechanic
     }
 }

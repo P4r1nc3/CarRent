@@ -2,15 +2,15 @@ using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Contexts;
 
-namespace CarRentApp.Views.Mechanic
+namespace CarRentApp.Views.Users.Admin
 {
-    public partial class MechanicView : UserControl
+    public partial class AdminView : UserControl
     {
         private readonly AuthContext _authContext;
 
         public event RoutedEventHandler? Logout;
 
-        public MechanicView()
+        public AdminView()
         {
             InitializeComponent();
             _authContext = AuthContext.GetInstance();
@@ -19,7 +19,6 @@ namespace CarRentApp.Views.Mechanic
             LoadUserInfo();
         }
 
-        // TODO move this somewhere to not duplicate the login in all user views
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             _authContext.Logout();

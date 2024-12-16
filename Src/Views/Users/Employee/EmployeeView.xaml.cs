@@ -6,7 +6,7 @@ using CarRentApp.Contexts;
 using CarRentApp.Models;
 using CarRentApp.Repositories;
 
-namespace CarRentApp.Views.Employee
+namespace CarRentApp.Views.Users.Employee
 {
     public partial class EmployeeView : UserControl
     {

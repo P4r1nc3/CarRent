@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using CarRentApp.Models;
 using CarRentApp.Services;
 
-namespace CarRentApp.Views.Register
+namespace CarRentApp.Views.Auth.Register
 {
     public partial class RegisterView : UserControl
     {
