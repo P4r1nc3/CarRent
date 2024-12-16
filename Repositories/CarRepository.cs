@@ -4,13 +4,13 @@ using System.Windows;
 using CarRentApp.Models;
 using CarRentApp.Context;
 
-namespace CarRentApp.Services
+namespace CarRentApp.Repositories
 {
-    public class CarService
+    public class CarRepository
     {
         private readonly DatabaseContext _dbContext;
 
-        public CarService()
+        public CarRepository()
         {
             _dbContext = new DatabaseContext();
         }

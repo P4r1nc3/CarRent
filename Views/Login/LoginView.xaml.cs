@@ -5,13 +5,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CarRentApp.Context;
 using CarRentApp.Models;
-using CarRentApp.Services;
+using CarRentApp.Repositories;
 
 namespace CarRentApp.Views.Login
 {
     public partial class LoginView : UserControl
     {
-        private readonly UserService _userService;
+        private readonly UserRepository _userRepository;
         private readonly UserContext _userContext;
 
         public event RoutedEventHandler? SwitchToRegister;
@@ -20,7 +20,7 @@ namespace CarRentApp.Views.Login
         public LoginView()
         {
             InitializeComponent();
-            _userService = new UserService();
+            _userRepository = new UserRepository();
             _userContext = UserContext.GetInstance();
         }
 
@@ -39,7 +39,7 @@ namespace CarRentApp.Views.Login
             try
             {
                 // Verify user credentials
-                var user = _userService.GetUsers()
+                var user = _userRepository.GetUsers()
                     .FirstOrDefault(u => u.Email == email && u.Password == password);
 
                 if (user != null)

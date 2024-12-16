@@ -3,13 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Context;
 using CarRentApp.Models;
-using CarRentApp.Services;
+using CarRentApp.Repositories;
 
 namespace CarRentApp.Views.Register
 {
     public partial class RegisterView : UserControl
     {
-        private readonly UserService _userService;
+        private readonly UserRepository _userRepository;
         private readonly UserContext _userContext;
 
         public event RoutedEventHandler? SwitchToLogin;
@@ -18,7 +18,7 @@ namespace CarRentApp.Views.Register
         public RegisterView()
         {
             InitializeComponent();
-            _userService = new UserService();
+            _userRepository = new UserRepository();
             _userContext = UserContext.GetInstance();
         }
 
@@ -41,7 +41,7 @@ namespace CarRentApp.Views.Register
             try
             {
                 // Add user to the database
-                User user = _userService.AddUser(firstName, lastName, email, password, Role.Customer);
+                User user = _userRepository.AddUser(firstName, lastName, email, password, Role.Customer);
 
                 // Set the current user in the UserContext
                 _userContext.SetCurrentUser(user);
