@@ -1,5 +1,5 @@
 using System.Linq;
-using CarRentApp.Context;
+using CarRentApp.Contexts;
 using CarRentApp.Models;
 using CarRentApp.Repositories;
 
@@ -8,12 +8,12 @@ namespace CarRentApp.Services
     public class LoginService
     {
         private readonly UserRepository _userRepository;
-        private readonly UserContext _userContext;
+        private readonly AuthContext _authContext;
 
         public LoginService()
         {
             _userRepository = new UserRepository();
-            _userContext = UserContext.GetInstance();
+            _authContext = AuthContext.GetInstance();
         }
 
         public User? LoginUser(string email, string password)
@@ -29,7 +29,7 @@ namespace CarRentApp.Services
             if (user != null)
             {
                 // Set the current user in the context
-                _userContext.SetCurrentUser(user);
+                _authContext.SetCurrentUser(user);
             }
 
             return user;
