@@ -1,11 +1,11 @@
-<UserControl x:Class="CarRentApp.Views.Mechanic.MechanicView"
+<UserControl x:Class="CarRentApp.Views.Users.Customer.CustomerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid Background="#F3F4F6">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="500">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
 
             <!-- Panel Title -->
-            <TextBlock Text="Mechanic Panel"
+            <TextBlock Text="Customer Panel"
                        FontSize="32"
                        FontWeight="Bold"
                        Foreground="#333"
@@ -17,9 +17,10 @@
                        FontSize="18"
                        Foreground="#555"
                        HorizontalAlignment="Center"
+                       TextAlignment="Center"
                        Margin="0,0,0,20" />
 
-			<!-- Logout Button -->
+            <!-- Logout Button -->
 			<Button Content="Logout"
                     Height="40"
                     Width="200"

@@ -1,4 +1,4 @@
-<UserControl x:Class="CarRentApp.Views.Employee.EmployeeView"
+<UserControl x:Class="CarRentApp.Views.Users.Employee.EmployeeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Grid Background="#F3F4F6">
