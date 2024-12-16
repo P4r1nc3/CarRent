@@ -6,9 +6,9 @@ namespace CarRentApp.Views.Users.Mechanic
 {
     public partial class MechanicView : UserControl
     {
-        private readonly AuthContext _authContext;
-
         public event RoutedEventHandler? Logout;
+
+        private readonly AuthContext _authContext;
 
         public MechanicView()
         {

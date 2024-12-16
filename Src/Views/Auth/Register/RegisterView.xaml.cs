@@ -8,9 +8,9 @@ namespace CarRentApp.Views.Auth.Register
 {
     public partial class RegisterView : UserControl
     {
-        private readonly RegisterService _registerService;
-
         public event RoutedEventHandler? SwitchToLogin;
+
+        private readonly RegisterService _registerService;
 
         public RegisterView()
         {
