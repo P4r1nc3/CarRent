@@ -29,15 +29,9 @@ namespace CarRentApp.Views.Mechanic
         private void LoadUserInfo()
         {
             var currentUser = _authContext.GetCurrentUser();
-
-            if (currentUser != null)
-            {
-                UserInfoTextBlock.Text = $"Logged in as: {currentUser.Name} {currentUser.Surname}";
-            }
-            else
-            {
-                UserInfoTextBlock.Text = "No user is currently logged in.";
-            }
+            UserInfoTextBlock.Text = currentUser != null
+                ? $"Logged in as: {currentUser.Name} {currentUser.Surname}"
+                : "No user is currently logged in.";
         }
     }
 }
