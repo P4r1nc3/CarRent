@@ -12,6 +12,7 @@ namespace CarRentApp.Views.Login
         private readonly LoginService _loginService;
 
         public event RoutedEventHandler? SwitchToRegister;
+        public event RoutedEventHandler? SwitchToMechanic;
         public event RoutedEventHandler? SwitchToCustomer;
         public event RoutedEventHandler? SwitchToEmployee;
 
@@ -37,17 +38,17 @@ namespace CarRentApp.Views.Login
                     // Navigate based on role
                     switch (user.Role)
                     {
+                        case Role.Admin:
+                            MessageBox.Show("Admin view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                        case Role.Mechanic:
+                            SwitchToMechanic?.Invoke(this, new RoutedEventArgs());
+                            break;
                         case Role.Customer:
                             SwitchToCustomer?.Invoke(this, new RoutedEventArgs());
                             break;
                         case Role.Employee:
                             SwitchToEmployee?.Invoke(this, new RoutedEventArgs());
-                            break;
-                        case Role.Mechanic:
-                            MessageBox.Show("Mechanic view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                            break;
-                        case Role.Admin:
-                            MessageBox.Show("Admin view not implemented yet.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                             break;
                     }
                 }
