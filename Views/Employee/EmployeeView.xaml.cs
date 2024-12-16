@@ -19,11 +19,11 @@ namespace CarRentApp.Views.Employee
         {
             InitializeComponent();
             _userContext = UserContext.GetInstance();
-            _userContext.CurrentUserChanged += DisplayCurrentUserInfo;
+            _userContext.CurrentUserChanged += LoadUserInfo;
             _carRepository = new CarRepository();
             _requestRepository = new RequestRepository();
 
-            DisplayCurrentUserInfo();
+            LoadUserInfo();
             LoadCarList();
             LoadCarStates();
             LoadRequestList();
@@ -129,7 +129,7 @@ namespace CarRentApp.Views.Employee
             Logout?.Invoke(this, new RoutedEventArgs());
         }
 
-        private void DisplayCurrentUserInfo()
+        private void LoadUserInfo()
         {
             var currentUser = _userContext.GetCurrentUser();
 
