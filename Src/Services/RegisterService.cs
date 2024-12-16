@@ -7,13 +7,13 @@ namespace CarRentApp.Services
 {
     public class RegisterService
     {
-        private readonly UserRepository _userRepository;
         private readonly AuthContext _authContext;
-
+        private readonly UserRepository _userRepository;
+        
         public RegisterService()
         {
-            _userRepository = new UserRepository();
             _authContext = AuthContext.GetInstance();
+            _userRepository = new UserRepository();
         }
 
         public User RegisterUser(string firstName, string lastName, string email, string password)

@@ -6,9 +6,9 @@ namespace CarRentApp.Views.Users.Customer
 {
     public partial class CustomerView : UserControl
     {
-        private readonly AuthContext _authContext;
-
         public event RoutedEventHandler? Logout;
+
+        private readonly AuthContext _authContext;
 
         public CustomerView()
         {

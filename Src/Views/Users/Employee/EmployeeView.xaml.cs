@@ -10,11 +10,11 @@ namespace CarRentApp.Views.Users.Employee
 {
     public partial class EmployeeView : UserControl
     {
+        public event RoutedEventHandler? Logout;
+
         private readonly AuthContext _authContext;
         private readonly CarRepository _carRepository;
         private readonly RequestRepository _requestRepository;
-
-        public event RoutedEventHandler? Logout;
 
         public EmployeeView()
         {
