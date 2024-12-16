@@ -1,4 +1,4 @@
-name: Build and Test .NET Project with MySQL and Secrets
+name: Build and Test .NET Project
 
 on:
   push:
@@ -23,7 +23,34 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Install dependencies
-      run: dotnet restore
+      run: |
+        cd CarRentApp
+        dotnet restore
 
     - name: Build solution
-      run: dotnet build --configuration Release --no-restore
+      run: |
+        cd CarRentApp
+        dotnet build --configuration Release --no-restore
+
+  test:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Install dependencies for tests
+      run: |
+        cd CarRentApp.Tests
+        dotnet restore
+
+    - name: Run tests
+      run: |
+        cd CarRentApp.Tests
+        dotnet test --configuration Release --no-restore --verbosity normal
