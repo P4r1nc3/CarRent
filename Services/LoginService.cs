@@ -16,7 +16,7 @@ namespace CarRentApp.Services
             _userContext = UserContext.GetInstance();
         }
 
-        public User? AuthenticateUser(string email, string password)
+        public User? LoginUser(string email, string password)
         {
             // Validate input
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))

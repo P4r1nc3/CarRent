@@ -24,7 +24,7 @@ namespace CarRentApp.Views.Login
         {
             try
             {
-                var user = _loginService.AuthenticateUser(
+                var user = _loginService.LoginUser(
                     EmailTextBox.Text.Trim(), 
                     PasswordBox.Password.Trim());
 
