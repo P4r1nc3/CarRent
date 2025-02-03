@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CarRentApp.Models;
 using CarRentApp.Services;
+using CarRentApp.Contexts;
+
 
 namespace CarRentApp.Views.Auth.Login
 {
@@ -17,10 +19,10 @@ namespace CarRentApp.Views.Auth.Login
 
         private readonly LoginService _loginService;
 
-        public LoginView()
+        public LoginView(DatabaseContext dbContext)
         {
             InitializeComponent();
-            _loginService = new LoginService();
+            _loginService = new LoginService(dbContext);
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)

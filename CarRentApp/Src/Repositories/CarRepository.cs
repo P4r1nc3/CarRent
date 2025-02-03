@@ -10,9 +10,9 @@ namespace CarRentApp.Repositories
     {
         private readonly DatabaseContext _dbContext;
 
-        public CarRepository()
+        public CarRepository(DatabaseContext dbContext)
         {
-            _dbContext = new DatabaseContext();
+            _dbContext = dbContext;
         }
 
         public void AddCar(string make, string model, int year, int horsePower, CarState carState)
