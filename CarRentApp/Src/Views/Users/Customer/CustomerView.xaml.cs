@@ -10,7 +10,7 @@ namespace CarRentApp.Views.Users.Customer
 
         private readonly AuthContext _authContext;
 
-        public CustomerView()
+        public CustomerView(DatabaseContext dbContext)
         {
             InitializeComponent();
             _authContext = AuthContext.GetInstance();

@@ -10,9 +10,9 @@ namespace CarRentApp.Repositories
     {
         private readonly DatabaseContext _dbContext;
 
-        public UserRepository()
+        public UserRepository(DatabaseContext dbContext)
         {
-            _dbContext = new DatabaseContext();
+            _dbContext = dbContext;
         }
 
         public User AddUser(string name, string surname, string email, string password, Role role)
