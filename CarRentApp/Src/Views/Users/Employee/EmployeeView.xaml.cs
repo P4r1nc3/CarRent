@@ -16,15 +16,15 @@ namespace CarRentApp.Views.Users.Employee
         private readonly CarRepository _carRepository;
         private readonly RequestRepository _requestRepository;
 
-        public EmployeeView()
+        public EmployeeView(DatabaseContext dbContext)
         {
             InitializeComponent();
 
             _authContext = AuthContext.GetInstance();
             _authContext.CurrentUserChanged += LoadUserInfo;
 
-            _carRepository = new CarRepository();
-            _requestRepository = new RequestRepository();
+            _carRepository = new CarRepository(dbContext);
+            _requestRepository = new RequestRepository(dbContext);
 
             LoadUserInfo();
             LoadCarList();

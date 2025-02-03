@@ -1,10 +1,12 @@
 using System.Windows;
+using Microsoft.EntityFrameworkCore;
 using CarRentApp.Views.Auth.Register;
 using CarRentApp.Views.Auth.Login;
 using CarRentApp.Views.Users.Admin;
 using CarRentApp.Views.Users.Customer;
 using CarRentApp.Views.Users.Employee;
 using CarRentApp.Views.Users.Mechanic;
+using CarRentApp.Contexts;
 
 namespace CarRentApp
 {
@@ -22,14 +24,18 @@ namespace CarRentApp
         {
             InitializeComponent();
 
-            // Initialize views
-            _registerView = new RegisterView();
-            _loginView = new LoginView();
+            // Initialize DatabaseContext
+            var options = new DbContextOptionsBuilder<DatabaseContext>().Options;
+            var dbContext = new DatabaseContext(options);
 
-            _adminView = new AdminView();
-            _customerView = new CustomerView();
-            _employeeView = new EmployeeView();
-            _mechanicView = new MechanicView();
+            // Initialize views
+            _registerView = new RegisterView(dbContext);
+            _loginView = new LoginView(dbContext);
+
+            _adminView = new AdminView(dbContext);
+            _customerView = new CustomerView(dbContext);
+            _employeeView = new EmployeeView(dbContext);
+            _mechanicView = new MechanicView(dbContext);
 
             // Navigation Events
             _loginView.SwitchToRegister += (_, __) => MainContent.Content = _registerView;
