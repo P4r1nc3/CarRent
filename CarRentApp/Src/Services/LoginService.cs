@@ -10,10 +10,10 @@ namespace CarRentApp.Services
         private readonly AuthContext _authContext;
         private readonly UserRepository _userRepository;
         
-        public LoginService()
+        public LoginService(DatabaseContext dbContext)
         {
             _authContext = AuthContext.GetInstance();
-            _userRepository = new UserRepository();
+            _userRepository = new UserRepository(dbContext);
         }
 
         public User? LoginUser(string email, string password)

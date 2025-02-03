@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Models;
 using CarRentApp.Services;
+using CarRentApp.Contexts;
 
 namespace CarRentApp.Views.Auth.Register
 {
@@ -12,10 +13,10 @@ namespace CarRentApp.Views.Auth.Register
 
         private readonly RegisterService _registerService;
 
-        public RegisterView()
+        public RegisterView(DatabaseContext dbContext)
         {
             InitializeComponent();
-            _registerService = new RegisterService();
+            _registerService = new RegisterService(dbContext);
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)

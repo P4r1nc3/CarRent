@@ -10,7 +10,7 @@ namespace CarRentApp.Views.Users.Mechanic
 
         private readonly AuthContext _authContext;
 
-        public MechanicView()
+        public MechanicView(DatabaseContext dbContext)
         {
             InitializeComponent();
             _authContext = AuthContext.GetInstance();
