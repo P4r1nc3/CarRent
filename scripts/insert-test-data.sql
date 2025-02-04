@@ -43,7 +43,14 @@ INSERT INTO Cars (Make, Model, Year, HorsePower, CarState) VALUES
 ('Toyota', 'Camry', 2020, 200, 2),        -- Rented
 ('Toyota', 'RAV4', 2021, 220, 0),         -- Available
 ('Toyota', 'Highlander', 2022, 300, 0),   -- Available
-('Toyota', 'Supra', 2023, 350, 2);        -- Rented
+('Toyota', 'Supra', 2023, 350, 2),        -- Rented
+
+-- inService
+('Audi', 'A8', 2024, 500, 3),  -- In Service
+('BMW', 'X7', 2024, 400, 3),   -- In Service
+('Ford', 'Ranger', 2024, 300, 3),  -- In Service
+('Honda', 'Odyssey', 2024, 250, 3),  -- In Service
+('Toyota', 'Sienna', 2024, 220, 3);  -- In Service
 
 -- Insert into Requests table
 INSERT INTO Requests (CarId, UserId, StartDate, EndDate, IsAccepted) VALUES
