@@ -37,16 +37,14 @@ namespace CarRentApp.Src.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure the one-to-many relationship between Repair and RepairItem.
             modelBuilder.Entity<Repair>()
                 .HasMany(r => r.RepairItems)
                 .WithOne(ri => ri.Repair)
                 .HasForeignKey(ri => ri.RepairId);
 
-            // Configure the relationship between Car and Repair.
             modelBuilder.Entity<Repair>()
                 .HasOne(r => r.Car)
-                .WithMany(c => c.Repairs)  // Make sure your Car model includes a Repairs collection.
+                .WithMany(c => c.Repairs)
                 .HasForeignKey(r => r.CarId);
 
             base.OnModelCreating(modelBuilder);

@@ -12,7 +12,7 @@ namespace CarRentApp.Views.Users.Mechanic
 
         private readonly AuthContext _authContext;
         private readonly CarRepository _carRepository;
-        private readonly RepairRepository _repairRepository; // New repository for repairs
+        private readonly RepairRepository _repairRepository;
         private readonly RequestRepository _requestRepository;
 
         public MechanicView(DatabaseContext dbContext)
@@ -23,13 +23,11 @@ namespace CarRentApp.Views.Users.Mechanic
             _authContext.CurrentUserChanged += LoadUserInfo;
 
             _carRepository = new CarRepository(dbContext);
-            _repairRepository = new RepairRepository(dbContext); // Initialize the repair repository
+            _repairRepository = new RepairRepository(dbContext);
             _requestRepository = new RequestRepository(dbContext);
 
-            // Populate the ComboBoxes with distinct values.
             PopulateComboBoxes();
 
-            // Load user info and the initial filtered car list.
             LoadUserInfo();
             LoadCarList();
             LoadRepairs();
@@ -91,27 +89,19 @@ namespace CarRentApp.Views.Users.Mechanic
 
         private void SetAsRepaired_Click(object sender, RoutedEventArgs e)
         {
-            // Ensure a row is selected in the DataGrid.
             if (CarDataGrid.SelectedItem is Car selectedCar)
             {
-                int carId = selectedCar.Id;  // Assumes Car has an 'Id' property.
+                int carId = selectedCar.Id;
 
-                // Open the Repair Details window for entering repair items.
                 RepairDetailsWindow repairWindow = new RepairDetailsWindow();
                 bool? result = repairWindow.ShowDialog();
 
                 if (result == true)
                 {
-                    // Retrieve the repair items from the dialog.
                     System.Collections.ObjectModel.ObservableCollection<RepairItem> repairItems = repairWindow.RepairItems;
-
-                    // Calculate the total cost based on each repair item's Cost and Quantity.
                     decimal totalCost = repairItems.Sum(item => item.Cost * item.Quantity);
-
-                    // Get a formatted summary string of the repair details.
                     string repairSummary = repairWindow.GetRepairItemsSummary();
 
-                    // Create a new repair record in the database via the RepairRepository.
                     _repairRepository.MarkCarAsRepaired(carId, repairItems, totalCost, repairSummary);
 
                     MessageBox.Show(
@@ -121,7 +111,6 @@ namespace CarRentApp.Views.Users.Mechanic
                         MessageBoxImage.Information
                     );
 
-                    // Refresh the car list to reflect any changes.
                     LoadCarList();
                     LoadRepairs();
                 }
@@ -191,7 +180,6 @@ namespace CarRentApp.Views.Users.Mechanic
 
         private void LoadRepairs()
         {
-            // Retrieve all repair records (with the related Car loaded) from the repository.
             List<Repair> repairs = _repairRepository.GetAllRepairs();
             RepairsDataGrid.ItemsSource = repairs;
         }
