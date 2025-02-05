@@ -2,16 +2,14 @@
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
-using CarRentApp.Src.Models; // Ensure this namespace contains RepairItem and other models
+using CarRentApp.Src.Models;
 
 namespace CarRentApp.Views.Users.Mechanic
 {
     public partial class RepairDetailsWindow : Window, INotifyPropertyChanged
     {
-        // Observable collection for repair items.
         public ObservableCollection<RepairItem> RepairItems { get; set; } = [];
 
-        // New property for an optional overall repair description.
         private string _overallDescription = string.Empty;
         public string OverallDescription
         {
@@ -31,12 +29,10 @@ namespace CarRentApp.Views.Users.Mechanic
             InitializeComponent();
             DataContext = this;
 
-            // Subscribe to collection changes to update the total cost.
             RepairItems.CollectionChanged += (s, e) =>
             {
                 UpdateTotal();
 
-                // Subscribe to PropertyChanged events for any new items.
                 if (e.NewItems != null)
                 {
                     foreach (RepairItem item in e.NewItems)
@@ -45,7 +41,6 @@ namespace CarRentApp.Views.Users.Mechanic
                     }
                 }
 
-                // Unsubscribe for removed items.
                 if (e.OldItems != null)
                 {
                     foreach (RepairItem item in e.OldItems)
@@ -64,21 +59,12 @@ namespace CarRentApp.Views.Users.Mechanic
             }
         }
 
-        /// <summary>
-        /// Recalculates the total cost (sum of Cost * Quantity for each repair item).
-        /// </summary>
         private void UpdateTotal()
         {
             decimal totalCost = RepairItems.Sum(item => item.Cost * item.Quantity);
             TotalCostTextBlock.Text = totalCost.ToString("C");
         }
 
-        /// <summary>
-        /// Returns a formatted summary string for the repair items.
-        /// If an overall repair description is provided, it is shown at the top.
-        /// For each repair item, if the individual description is not provided,
-        /// a default ("Item") is used.
-        /// </summary>
         public string GetRepairItemsSummary()
         {
             if (!RepairItems.Any())
@@ -88,7 +74,6 @@ namespace CarRentApp.Views.Users.Mechanic
 
             StringBuilder sb = new StringBuilder();
 
-            // If the mechanic provided an overall repair description, include it.
             if (!string.IsNullOrWhiteSpace(OverallDescription))
             {
                 sb.AppendLine("Repair Description:");
@@ -99,7 +84,6 @@ namespace CarRentApp.Views.Users.Mechanic
             sb.AppendLine("Repair Items:");
             foreach (RepairItem item in RepairItems)
             {
-                // Use "Item" as default if individual description is blank.
                 string itemDesc = string.IsNullOrWhiteSpace(item.Description) ? "Item" : item.Description;
                 decimal subTotal = item.Cost * item.Quantity;
                 sb.AppendLine($"{itemDesc} ({item.Quantity} x {item.Cost:C} = {subTotal:C})");
@@ -111,7 +95,6 @@ namespace CarRentApp.Views.Users.Mechanic
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            // Optionally perform validation here.
             DialogResult = true;
             Close();
         }

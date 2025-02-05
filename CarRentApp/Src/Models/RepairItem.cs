@@ -4,7 +4,6 @@ namespace CarRentApp.Src.Models
 {
     public class RepairItem : INotifyPropertyChanged
     {
-        // Primary key property
         public int Id { get; set; }
 
         private string _description = string.Empty;
@@ -49,14 +48,11 @@ namespace CarRentApp.Src.Models
             }
         }
 
-        // Foreign key to the parent Repair record.
         public int RepairId { get; set; }
 
-        // Navigation property for the parent Repair.
-        public Repair Repair { get; set; }
+        public required Repair Repair { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
