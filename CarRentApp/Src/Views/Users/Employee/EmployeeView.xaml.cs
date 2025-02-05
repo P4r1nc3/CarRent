@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Repositories;
 
 namespace CarRentApp.Views.Users.Employee
 {

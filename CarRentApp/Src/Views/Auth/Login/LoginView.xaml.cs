@@ -1,10 +1,9 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CarRentApp.Models;
-using CarRentApp.Services;
-using CarRentApp.Contexts;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Services;
 
 
 namespace CarRentApp.Views.Auth.Login
@@ -23,14 +22,18 @@ namespace CarRentApp.Views.Auth.Login
         {
             InitializeComponent();
             _loginService = new LoginService(dbContext);
+
+#if !DEBUG
+            DebugPanel.Visibility = Visibility.Collapsed;
+#endif
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var user = _loginService.LoginUser(
-                    EmailTextBox.Text.Trim(), 
+                User? user = _loginService.LoginUser(
+                    EmailTextBox.Text.Trim(),
                     PasswordBox.Password.Trim());
 
                 if (user != null)
@@ -79,6 +82,37 @@ namespace CarRentApp.Views.Auth.Login
         {
             EmailTextBox.Text = string.Empty;
             PasswordBox.Password = string.Empty;
+        }
+
+        private void CustomerLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            EmailTextBox.Text = "customer@example.com";
+            PasswordBox.Password = "password";
+
+            Login_Click(sender, e);
+        }
+
+        private void EmployeeLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            EmailTextBox.Text = "employee@example.com";
+            PasswordBox.Password = "password";
+
+            Login_Click(sender, e);
+        }
+
+        private void MechanicLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            EmailTextBox.Text = "mechanic@example.com";
+            PasswordBox.Password = "password";
+
+            Login_Click(sender, e);
+        }
+        private void AdminLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            EmailTextBox.Text = "admin@example.com";
+            PasswordBox.Password = "password";
+
+            Login_Click(sender, e);
         }
     }
 }

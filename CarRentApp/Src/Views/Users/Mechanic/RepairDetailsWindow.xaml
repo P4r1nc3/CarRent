@@ -1,0 +1,56 @@
+﻿<Window x:Class="CarRentApp.Views.Users.Mechanic.RepairDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Repair Details" Height="500" Width="600">
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<!-- Title -->
+			<RowDefinition Height="*" />
+			<!-- DataGrid -->
+			<RowDefinition Height="Auto" />
+			<!-- Overall description -->
+			<RowDefinition Height="Auto" />
+			<!-- Bottom panel -->
+		</Grid.RowDefinitions>
+
+		<!-- Title -->
+		<TextBlock Grid.Row="0"
+				   Text="Enter Repair Items:"
+				   FontSize="16"
+				   FontWeight="Bold"
+				   Margin="0,0,0,10" />
+
+		<!-- DataGrid for repair items -->
+		<DataGrid x:Name="RepairItemsDataGrid" Grid.Row="1"
+				  AutoGenerateColumns="False"
+				  CanUserAddRows="True"
+				  Margin="0,0,0,10"
+				  ItemsSource="{Binding RepairItems}">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
+				<DataGridTextColumn Header="Cost" Binding="{Binding Cost, StringFormat=C}" Width="100" />
+				<DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="100" />
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<!-- Overall Repair Description (optional) -->
+		<StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,0,0,10">
+			<TextBlock Text="Overall Repair Description (optional):"
+					   VerticalAlignment="Center"
+					   Margin="0,0,0,5"/>
+			<!-- Multi-line TextBox to allow more detailed description -->
+			<TextBox Text="{Binding OverallDescription, UpdateSourceTrigger=PropertyChanged}"
+					 Height="100"
+					 AcceptsReturn="True"
+					 TextWrapping="Wrap" />
+		</StackPanel>
+
+		<!-- Bottom panel: total cost and OK button -->
+		<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+			<TextBlock Text="Total: " VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,5,0"/>
+			<TextBlock x:Name="TotalCostTextBlock" VerticalAlignment="Center" FontWeight="Bold" />
+			<Button Content="OK" Width="80" Margin="20,0,0,0" Click="OkButton_Click" />
+		</StackPanel>
+	</Grid>
+</Window>

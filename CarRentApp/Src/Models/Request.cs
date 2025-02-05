@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CarRentApp.Models
+namespace CarRentApp.Src.Models
 {
     public class Request
     {

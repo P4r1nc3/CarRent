@@ -1,9 +1,7 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
-using CarRentApp.Models;
-using CarRentApp.Services;
-using CarRentApp.Contexts;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Services;
 
 namespace CarRentApp.Views.Auth.Register
 {
@@ -25,9 +23,9 @@ namespace CarRentApp.Views.Auth.Register
             {
                 // User registration
                 _registerService.RegisterUser(
-                    FirstNameTextBox.Text.Trim(), 
-                    LastNameTextBox.Text.Trim(), 
-                    EmailTextBox.Text.Trim(), 
+                    FirstNameTextBox.Text.Trim(),
+                    LastNameTextBox.Text.Trim(),
+                    EmailTextBox.Text.Trim(),
                     PasswordBox.Password.Trim()
                 );
 
