@@ -1,15 +1,14 @@
-using System.Linq;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Repositories;
 
-namespace CarRentApp.Services
+namespace CarRentApp.Src.Services
 {
     public class LoginService
     {
         private readonly AuthContext _authContext;
         private readonly UserRepository _userRepository;
-        
+
         public LoginService(DatabaseContext dbContext)
         {
             _authContext = AuthContext.GetInstance();
@@ -20,10 +19,12 @@ namespace CarRentApp.Services
         {
             // Validate input
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
                 throw new ArgumentException("Email and password cannot be empty.");
+            }
 
             // Check user credentials
-            var user = _userRepository.GetUsers()
+            User? user = _userRepository.GetUsers()
                 .FirstOrDefault(u => u.Email == email && u.Password == password);
 
             if (user != null)

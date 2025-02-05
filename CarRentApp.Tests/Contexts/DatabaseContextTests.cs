@@ -1,7 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using CarRentApp.Contexts;
+using CarRentApp.Src.Contexts;
 
 namespace CarRentApp.Tests
 {

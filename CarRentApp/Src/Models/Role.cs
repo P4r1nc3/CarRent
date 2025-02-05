@@ -1,4 +1,4 @@
-namespace CarRentApp.Models
+namespace CarRentApp.Src.Models
 {
     public enum Role
     {

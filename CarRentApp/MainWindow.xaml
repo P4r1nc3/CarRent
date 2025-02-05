@@ -1,7 +1,6 @@
 <Window x:Class="CarRentApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:CarRentApp.Views"
         Title="Car Rent App" Width="1200" Height="800" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         Background="#F3F4F6">
     <Grid>

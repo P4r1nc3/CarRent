@@ -2,9 +2,9 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CarRentApp.Models;
-using CarRentApp.Services;
-using CarRentApp.Contexts;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Services;
 
 
 namespace CarRentApp.Views.Auth.Login
