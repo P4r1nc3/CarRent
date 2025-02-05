@@ -1,9 +1,7 @@
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using CarRentApp.Src.Models;
 using Microsoft.EntityFrameworkCore;
-using CarRentApp.Models;
-using System;
 
-namespace CarRentApp.Contexts
+namespace CarRentApp.Src.Contexts
 {
     public class DatabaseContext : DbContext
     {
@@ -16,12 +14,14 @@ namespace CarRentApp.Contexts
         public DbSet<Car> Cars { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Repair> Repairs { get; set; }
+        public DbSet<RepairItem> RepairItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var connectionString = Environment.GetEnvironmentVariable("CAR_RENT_DB_CONNECTION");
+                string? connectionString = Environment.GetEnvironmentVariable("CAR_RENT_DB_CONNECTION");
 
                 if (string.IsNullOrEmpty(connectionString))
                 {
@@ -33,6 +33,23 @@ namespace CarRentApp.Contexts
                     new MySqlServerVersion(new Version(8, 0, 32))
                 );
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Configure the one-to-many relationship between Repair and RepairItem.
+            modelBuilder.Entity<Repair>()
+                .HasMany(r => r.RepairItems)
+                .WithOne(ri => ri.Repair)
+                .HasForeignKey(ri => ri.RepairId);
+
+            // Configure the relationship between Car and Repair.
+            modelBuilder.Entity<Repair>()
+                .HasOne(r => r.Car)
+                .WithMany(c => c.Repairs)  // Make sure your Car model includes a Repairs collection.
+                .HasForeignKey(r => r.CarId);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -1,10 +1,10 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using CarRentApp.Models;
 using CarRentApp.Repositories;
-using CarRentApp.Contexts;
 using CarRentApp.Services;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
 
 namespace CarRentApp.Tests
 {

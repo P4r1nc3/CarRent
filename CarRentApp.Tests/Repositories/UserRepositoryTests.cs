@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using CarRentApp.Models;
 using CarRentApp.Repositories;
-using CarRentApp.Contexts;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
 
 namespace CarRentApp.Tests
 {

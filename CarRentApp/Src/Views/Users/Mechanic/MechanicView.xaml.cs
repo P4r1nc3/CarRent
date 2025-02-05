@@ -1,8 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Repositories;
 
 namespace CarRentApp.Views.Users.Mechanic
 {
@@ -12,6 +12,7 @@ namespace CarRentApp.Views.Users.Mechanic
 
         private readonly AuthContext _authContext;
         private readonly CarRepository _carRepository;
+        private readonly RepairRepository _repairRepository; // New repository for repairs
         private readonly RequestRepository _requestRepository;
 
         public MechanicView(DatabaseContext dbContext)
@@ -22,12 +23,16 @@ namespace CarRentApp.Views.Users.Mechanic
             _authContext.CurrentUserChanged += LoadUserInfo;
 
             _carRepository = new CarRepository(dbContext);
+            _repairRepository = new RepairRepository(dbContext); // Initialize the repair repository
             _requestRepository = new RequestRepository(dbContext);
 
+            // Populate the ComboBoxes with distinct values.
             PopulateComboBoxes();
 
+            // Load user info and the initial filtered car list.
             LoadUserInfo();
             LoadCarList();
+            LoadRepairs();
         }
 
         private void PopulateComboBoxes()
@@ -82,6 +87,56 @@ namespace CarRentApp.Views.Users.Mechanic
             LoadCarList();
         }
 
+
+
+        private void SetAsRepaired_Click(object sender, RoutedEventArgs e)
+        {
+            // Ensure a row is selected in the DataGrid.
+            if (CarDataGrid.SelectedItem is Car selectedCar)
+            {
+                int carId = selectedCar.Id;  // Assumes Car has an 'Id' property.
+
+                // Open the Repair Details window for entering repair items.
+                RepairDetailsWindow repairWindow = new RepairDetailsWindow();
+                bool? result = repairWindow.ShowDialog();
+
+                if (result == true)
+                {
+                    // Retrieve the repair items from the dialog.
+                    System.Collections.ObjectModel.ObservableCollection<RepairItem> repairItems = repairWindow.RepairItems;
+
+                    // Calculate the total cost based on each repair item's Cost and Quantity.
+                    decimal totalCost = repairItems.Sum(item => item.Cost * item.Quantity);
+
+                    // Get a formatted summary string of the repair details.
+                    string repairSummary = repairWindow.GetRepairItemsSummary();
+
+                    // Create a new repair record in the database via the RepairRepository.
+                    _repairRepository.MarkCarAsRepaired(carId, repairItems, totalCost, repairSummary);
+
+                    MessageBox.Show(
+                        $"Car marked as repaired with a total repair cost of {totalCost:C}.\n\nDetails:\n{repairSummary}",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+
+                    // Refresh the car list to reflect any changes.
+                    LoadCarList();
+                    LoadRepairs();
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Please select a car row before setting it as repaired.",
+                    "No Car Selected",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+            }
+        }
+
         private void LoadCarList()
         {
             IEnumerable<Car> cars = _carRepository.GetCars()
@@ -126,51 +181,19 @@ namespace CarRentApp.Views.Users.Mechanic
             CarDataGrid.ItemsSource = cars.ToList();
         }
 
-        private void SetAsRepaired_Click(object sender, RoutedEventArgs e)
-        {
-            // Retrieve selected values from the ComboBoxes.
-            string make = MakeComboBox.SelectedItem?.ToString() ?? "";
-            string model = ModelComboBox.SelectedItem?.ToString() ?? "";
-            string yearText = YearComboBox.SelectedItem?.ToString() ?? "";
-            string horsePowerText = HorsePowerComboBox.SelectedItem?.ToString() ?? "";
-
-            // Basic validation: Ensure the user has selected specific values (not "All") in each field.
-            if (string.IsNullOrEmpty(make) || string.IsNullOrEmpty(model) ||
-                string.IsNullOrEmpty(yearText) || string.IsNullOrEmpty(horsePowerText) ||
-                make == "All" || model == "All" || yearText == "All" || horsePowerText == "All")
-            {
-                MessageBox.Show("Please select specific values for each field.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!int.TryParse(yearText, out int year) || !int.TryParse(horsePowerText, out int horsePower))
-            {
-                MessageBox.Show("Year and Horse Power must be valid numbers.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                // e.g.
-                // _carRepository.MarkCarAsRepaired(make, model, year, horsePower);
-
-                LoadCarList();
-
-                MessageBox.Show("Car set as repaired successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-
         private void LoadUserInfo()
         {
             User? currentUser = _authContext.GetCurrentUser();
             UserInfoTextBlock.Text = currentUser != null
                 ? $"Logged in as: {currentUser.Name} {currentUser.Surname}"
                 : "No user is currently logged in.";
+        }
+
+        private void LoadRepairs()
+        {
+            // Retrieve all repair records (with the related Car loaded) from the repository.
+            List<Repair> repairs = _repairRepository.GetAllRepairs();
+            RepairsDataGrid.ItemsSource = repairs;
         }
     }
 }

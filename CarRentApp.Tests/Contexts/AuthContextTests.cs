@@ -1,7 +1,8 @@
 using System;
 using Xunit;
-using CarRentApp.Contexts;
 using CarRentApp.Models;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Contexts;
 
 namespace CarRentApp.Tests
 {

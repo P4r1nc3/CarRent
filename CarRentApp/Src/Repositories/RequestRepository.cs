@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
 
-namespace CarRentApp.Repositories
+namespace CarRentApp.Src.Repositories
 {
     public class RequestRepository
     {
         private readonly DatabaseContext _dbContext;
         private readonly CarRepository _carRepository;
         private readonly UserRepository _userRepository;
-     
+
         public RequestRepository(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
@@ -21,10 +18,10 @@ namespace CarRentApp.Repositories
 
         public void CreateRequest(int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
         {
-            var car = _carRepository.GetCar(carId);
-            var user = _userRepository.GetUser(userId);
+            Models.Car car = _carRepository.GetCar(carId);
+            User user = _userRepository.GetUser(userId);
 
-            var newRequest = new Request
+            Request newRequest = new Request
             {
                 CarId = carId,
                 UserId = userId,
@@ -41,12 +38,8 @@ namespace CarRentApp.Repositories
 
         public Request GetRequest(int requestId)
         {
-            var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
-            if (request == null)
-            {
-                throw new KeyNotFoundException($"Request with ID {requestId} not found.");
-            }
-            return request;
+            Request? request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
+            return request == null ? throw new KeyNotFoundException($"Request with ID {requestId} not found.") : request;
         }
 
         public List<Request> GetRequests()
@@ -56,7 +49,7 @@ namespace CarRentApp.Repositories
 
         public void UpdateRequest(int requestId, int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
         {
-            var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
+            Request? request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
             if (request != null)
             {
                 request.CarId = carId;
@@ -75,7 +68,7 @@ namespace CarRentApp.Repositories
 
         public void RemoveRequest(int requestId)
         {
-            var request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
+            Request? request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
             if (request != null)
             {
                 _dbContext.Requests.Remove(request);

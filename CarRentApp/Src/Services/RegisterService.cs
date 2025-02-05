@@ -1,15 +1,14 @@
-using System;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Repositories;
 
-namespace CarRentApp.Services
+namespace CarRentApp.Src.Services
 {
     public class RegisterService
     {
         private readonly AuthContext _authContext;
         private readonly UserRepository _userRepository;
-        
+
         public RegisterService(DatabaseContext dbContext)
         {
             _authContext = AuthContext.GetInstance();
@@ -25,7 +24,7 @@ namespace CarRentApp.Services
             }
 
             // Create and save the new user
-            var user = _userRepository.AddUser(firstName, lastName, email, password, Role.Customer);
+            User user = _userRepository.AddUser(firstName, lastName, email, password, Role.Customer);
 
             // Set the new user in the UserContext
             _authContext.SetCurrentUser(user);
