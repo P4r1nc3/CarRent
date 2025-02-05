@@ -1,10 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using CarRentApp.Models;
-using CarRentApp.Contexts;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
 
-namespace CarRentApp.Repositories
+namespace CarRentApp.Src.Repositories
 {
     public class CarRepository
     {
@@ -17,13 +14,14 @@ namespace CarRentApp.Repositories
 
         public void AddCar(string make, string model, int year, int horsePower, CarState carState)
         {
-            var newCar = new Car
+            Car newCar = new()
             {
                 Make = make,
                 Model = model,
                 Year = year,
                 HorsePower = horsePower,
-                CarState = carState
+                CarState = carState,
+                Repairs = []
             };
 
             _dbContext.Cars.Add(newCar);
@@ -32,12 +30,8 @@ namespace CarRentApp.Repositories
 
         public Car GetCar(int carId)
         {
-            var car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
-            if (car == null)
-            {
-                throw new KeyNotFoundException($"Car with ID {carId} not found.");
-            }
-            return car;
+            Car? car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
+            return car == null ? throw new KeyNotFoundException($"Car with ID {carId} not found.") : car;
         }
 
         public List<Car> GetCars()
@@ -47,7 +41,7 @@ namespace CarRentApp.Repositories
 
         public void UpdateCar(int carId, string make, string model, int year, int horsePower, CarState carState)
         {
-            var car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
+            Car? car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
             if (car != null)
             {
                 car.Make = make;
@@ -66,7 +60,7 @@ namespace CarRentApp.Repositories
 
         public void RemoveCar(int carId)
         {
-            var car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
+            Car? car = _dbContext.Cars.FirstOrDefault(c => c.Id == carId);
             if (car != null)
             {
                 _dbContext.Cars.Remove(car);

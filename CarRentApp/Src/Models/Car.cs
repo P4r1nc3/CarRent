@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CarRentApp.Models
+namespace CarRentApp.Src.Models
 {
     public class Car
     {
@@ -19,5 +19,8 @@ namespace CarRentApp.Models
 
         [Required]
         public required CarState CarState { get; set; }
+
+        // Navigation property for repairs.
+        public required ICollection<Repair> Repairs { get; set; }
     }
 }
