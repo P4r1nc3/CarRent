@@ -1,18 +1,16 @@
-using System;
-using Microsoft.EntityFrameworkCore;
-using Xunit;
-using CarRentApp.Repositories;
-using CarRentApp.Services;
 using CarRentApp.Src.Contexts;
 using CarRentApp.Src.Models;
+using CarRentApp.Src.Repositories;
+using CarRentApp.Src.Services;
+using Microsoft.EntityFrameworkCore;
 
-namespace CarRentApp.Tests
+namespace CarRentApp.Tests.Services
 {
     public class LoginServiceTests
     {
         public LoginServiceTests()
         {
-            var authContext = AuthContext.GetInstance();
+            AuthContext authContext = AuthContext.GetInstance();
             authContext.SetCurrentUser(null!);
         }
 
@@ -27,19 +25,19 @@ namespace CarRentApp.Tests
         public void LoginUser_Should_ReturnUser_When_CredentialsAreValid()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var userRepository = new UserRepository(context);
+                UserRepository userRepository = new UserRepository(context);
                 userRepository.AddUser("Test", "User", "test.user@example.com", "secret", Role.Customer);
             }
 
             User? result;
             // Act
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var loginService = new LoginService(context);
+                LoginService loginService = new LoginService(context);
                 result = loginService.LoginUser("test.user@example.com", "secret");
             }
 
@@ -47,7 +45,7 @@ namespace CarRentApp.Tests
             Assert.NotNull(result);
             Assert.Equal("test.user@example.com", result!.Email);
 
-            var authContext = AuthContext.GetInstance();
+            AuthContext authContext = AuthContext.GetInstance();
             Assert.Equal(result.Id, authContext.GetCurrentUser()?.Id);
         }
 
@@ -55,26 +53,26 @@ namespace CarRentApp.Tests
         public void LoginUser_Should_ReturnNull_When_CredentialsAreInvalid()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var userRepository = new UserRepository(context);
+                UserRepository userRepository = new UserRepository(context);
                 userRepository.AddUser("Test", "User", "test.user@example.com", "secret", Role.Customer);
             }
 
             User? result;
             // Act
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var loginService = new LoginService(context);
+                LoginService loginService = new LoginService(context);
                 result = loginService.LoginUser("test.user@example.com", "wrongpassword");
             }
 
             // Assert
             Assert.Null(result);
 
-            var authContext = AuthContext.GetInstance();
+            AuthContext authContext = AuthContext.GetInstance();
             Assert.Null(authContext.GetCurrentUser());
         }
 
@@ -82,28 +80,24 @@ namespace CarRentApp.Tests
         public void LoginUser_Should_ThrowArgumentException_When_EmailIsEmpty()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
-            {
-                var loginService = new LoginService(context);
-                Assert.Throws<ArgumentException>(() => loginService.LoginUser("", "secret"));
-            }
+            using DatabaseContext context = new DatabaseContext(options);
+            LoginService loginService = new LoginService(context);
+            Assert.Throws<ArgumentException>(() => loginService.LoginUser("", "secret"));
         }
 
         [Fact]
         public void LoginUser_Should_ThrowArgumentException_When_PasswordIsEmpty()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
-            {
-                var loginService = new LoginService(context);
-                Assert.Throws<ArgumentException>(() => loginService.LoginUser("test.user@example.com", ""));
-            }
+            using DatabaseContext context = new DatabaseContext(options);
+            LoginService loginService = new LoginService(context);
+            Assert.Throws<ArgumentException>(() => loginService.LoginUser("test.user@example.com", ""));
         }
     }
 }
