@@ -50,8 +50,8 @@ INSERT INTO Cars (Make, Model, Year, HorsePower, CarState) VALUES
 ('Toyota', 'Supra', 2023, 350, 2),        -- Rented
 
 -- inService (These will have IDs 26 through 30)
-('Audi', 'A8', 2024, 500, 3),        -- In Service (ID = 26)
-('BMW', 'X7', 2024, 400, 3),         -- In Service (ID = 27)
+('Audi', 'A8', 2024, 500, 3),          -- In Service (ID = 26)
+('BMW', 'X7', 2024, 400, 3),           -- In Service (ID = 27)
 ('Ford', 'Ranger', 2024, 300, 3),      -- In Service (ID = 28)
 ('Honda', 'Odyssey', 2024, 250, 3),    -- In Service (ID = 29)
 ('Toyota', 'Sienna', 2024, 220, 3);    -- In Service (ID = 30)
@@ -71,31 +71,3 @@ INSERT INTO Requests (CarId, UserId, StartDate, EndDate, IsAccepted) VALUES
 (15, 3, '2025-03-04', '2025-03-14', TRUE),  -- BMW X5 Rented
 (19, 2, '2025-03-06', '2025-03-16', TRUE),  -- Honda Pilot Rented
 (18, 3, '2025-03-08', '2025-03-18', TRUE);  -- Toyota Camry Rented
-
--- ====================================
--- Insert into Repairs table
--- (Example: creating repair records for some inService cars)
--- ====================================
-INSERT INTO Repairs (CarId, RepairSummary, TotalCost, RepairDate) VALUES
--- For Audi A8 (CarId = 26)
-(26, 'Replaced engine oil, oil filter and repaired brakes. Parts and labor included.', 350.00, '2025-04-15'),
--- For BMW X7 (CarId = 27)
-(27, 'Repaired suspension and replaced worn-out tires. Complete service performed.', 1200.00, '2025-04-18');
-
--- ====================================
--- Insert into RepairItems table
--- (Each repair record can have multiple repair items)
--- ====================================
--- For Repair record with Id = 1 (Audi A8 repair)
-INSERT INTO RepairItems (RepairId, Description, Cost, Quantity) VALUES
-(1, 'Engine oil replacement', 100.00, 1),
-(1, 'Oil filter', 50.00, 1),
-(1, 'Brake repair', 100.00, 1),
-(1, 'Labor', 50.00, 1);
-
--- For Repair record with Id = 2 (BMW X7 repair)
-INSERT INTO RepairItems (RepairId, Description, Cost, Quantity) VALUES
-(2, 'Suspension repair', 400.00, 1),
-(2, 'Tire replacement', 300.00, 1),
-(2, 'Wheel alignment', 200.00, 1),
-(2, 'Labor', 300.00, 1);

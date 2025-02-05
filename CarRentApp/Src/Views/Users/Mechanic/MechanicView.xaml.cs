@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Src.Contexts;
@@ -15,6 +16,8 @@ namespace CarRentApp.Views.Users.Mechanic
         private readonly RepairRepository _repairRepository;
         private readonly RequestRepository _requestRepository;
 
+        private List<Car> _allCars = [];
+
         public MechanicView(DatabaseContext dbContext)
         {
             InitializeComponent();
@@ -26,6 +29,7 @@ namespace CarRentApp.Views.Users.Mechanic
             _repairRepository = new RepairRepository(dbContext);
             _requestRepository = new RequestRepository(dbContext);
 
+            _allCars = _carRepository.GetCars();
             PopulateComboBoxes();
 
             LoadUserInfo();
@@ -33,59 +37,144 @@ namespace CarRentApp.Views.Users.Mechanic
             LoadRepairs();
         }
 
+        #region Filtering Helpers
+
+        private IEnumerable<Car> GetFilteredCarsFromAll()
+        {
+            IEnumerable<Car> filtered = _allCars;
+            if (MakeComboBox.SelectedItem != null && MakeComboBox.SelectedItem.ToString() != "All")
+            {
+                filtered = filtered.Where(car => car.Make.Equals(MakeComboBox.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (ModelComboBox.SelectedItem != null && ModelComboBox.SelectedItem.ToString() != "All")
+            {
+                filtered = filtered.Where(car => car.Model.Equals(ModelComboBox.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (YearComboBox.SelectedItem != null && YearComboBox.SelectedItem.ToString() != "All" &&
+                int.TryParse(YearComboBox.SelectedItem.ToString(), out int selectedYear))
+            {
+                filtered = filtered.Where(car => car.Year == selectedYear);
+            }
+
+            if (HorsePowerComboBox.SelectedItem != null && HorsePowerComboBox.SelectedItem.ToString() != "All" &&
+                int.TryParse(HorsePowerComboBox.SelectedItem.ToString(), out int selectedHorsePower))
+            {
+                filtered = filtered.Where(car => car.HorsePower == selectedHorsePower);
+            }
+
+            return filtered;
+        }
+
+        private IEnumerable<Car> GetCarsByMake()
+        {
+            IEnumerable<Car> filtered = _allCars;
+            if (MakeComboBox.SelectedItem != null && MakeComboBox.SelectedItem.ToString() != "All")
+            {
+                filtered = filtered.Where(car => car.Make.Equals(MakeComboBox.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase));
+            }
+
+            return filtered;
+        }
+
+        private IEnumerable<Car> GetCarsByMakeAndModel()
+        {
+            IEnumerable<Car> filtered = GetCarsByMake();
+            if (ModelComboBox.SelectedItem != null && ModelComboBox.SelectedItem.ToString() != "All")
+            {
+                filtered = filtered.Where(car => car.Model.Equals(ModelComboBox.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase));
+            }
+
+            return filtered;
+        }
+
+
+        private IEnumerable<Car> GetCarsByMakeModelYear()
+        {
+            IEnumerable<Car> filtered = GetCarsByMakeAndModel();
+            if (YearComboBox.SelectedItem != null && YearComboBox.SelectedItem.ToString() != "All" &&
+                int.TryParse(YearComboBox.SelectedItem.ToString(), out int selectedYear))
+            {
+                filtered = filtered.Where(car => car.Year == selectedYear);
+            }
+
+            return filtered;
+        }
+
+        #endregion
+
+        #region ComboBox Population & Updates
+
+
         private void PopulateComboBoxes()
         {
-            List<Car> allCars = _carRepository.GetCars();
-
-            List<string> makes = allCars.Select(car => car.Make)
-                               .Distinct()
-                               .OrderBy(s => s)
-                               .ToList();
+            List<string> makes = _allCars
+                .Select(car => car.Make)
+                .Distinct()
+                .OrderBy(s => s)
+                .ToList();
             makes.Insert(0, "All");
             MakeComboBox.ItemsSource = makes;
             MakeComboBox.SelectedIndex = 0;
 
-            List<string> models = allCars.Select(car => car.Model)
-                                .Distinct()
-                                .OrderBy(s => s)
-                                .ToList();
-            models.Insert(0, "All");
-            ModelComboBox.ItemsSource = models;
-            ModelComboBox.SelectedIndex = 0;
-
-            List<int> years = allCars.Select(car => car.Year)
-                               .Distinct()
-                               .OrderBy(y => y)
-                               .ToList();
-
-            List<string> yearStrings = years.Select(y => y.ToString()).ToList();
-            yearStrings.Insert(0, "All");
-            YearComboBox.ItemsSource = yearStrings;
-            YearComboBox.SelectedIndex = 0;
-
-            List<int> horsePowers = allCars.Select(car => car.HorsePower)
-                                     .Distinct()
-                                     .OrderBy(h => h)
-                                     .ToList();
-            List<string> hpStrings = horsePowers.Select(h => h.ToString()).ToList();
-            hpStrings.Insert(0, "All");
-            HorsePowerComboBox.ItemsSource = hpStrings;
-            HorsePowerComboBox.SelectedIndex = 0;
+            UpdateComboBoxes();
         }
 
+        private void UpdateComboBoxes()
+        {
+            List<string> models = GetCarsByMake()
+                .Select(car => car.Model)
+                .Distinct()
+                .OrderBy(s => s)
+                .ToList();
+            models.Insert(0, "All");
+            ModelComboBox.ItemsSource = models;
+            if (ModelComboBox.SelectedItem == null || !models.Contains(ModelComboBox.SelectedItem.ToString()))
+            {
+                ModelComboBox.SelectedIndex = 0;
+            }
+
+            List<string> years = GetCarsByMakeAndModel()
+                .Select(car => car.Year.ToString())
+                .Distinct()
+                .OrderBy(s => s)
+                .ToList();
+            years.Insert(0, "All");
+            YearComboBox.ItemsSource = years;
+            if (YearComboBox.SelectedItem == null || !years.Contains(YearComboBox.SelectedItem.ToString()))
+            {
+                YearComboBox.SelectedIndex = 0;
+            }
+
+            List<string> horsePowers = GetCarsByMakeModelYear()
+                .Select(car => car.HorsePower.ToString())
+                .Distinct()
+                .OrderBy(s => s)
+                .ToList();
+            horsePowers.Insert(0, "All");
+            HorsePowerComboBox.ItemsSource = horsePowers;
+            if (HorsePowerComboBox.SelectedItem == null || !horsePowers.Contains(HorsePowerComboBox.SelectedItem.ToString()))
+            {
+                HorsePowerComboBox.SelectedIndex = 0;
+            }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void FilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateComboBoxes();
+            LoadCarList();
+        }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             _authContext.Logout();
             Logout?.Invoke(this, new RoutedEventArgs());
         }
-
-        private void FilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            LoadCarList();
-        }
-
-
 
         private void SetAsRepaired_Click(object sender, RoutedEventArgs e)
         {
@@ -98,7 +187,7 @@ namespace CarRentApp.Views.Users.Mechanic
 
                 if (result == true)
                 {
-                    System.Collections.ObjectModel.ObservableCollection<RepairItem> repairItems = repairWindow.RepairItems;
+                    ObservableCollection<RepairItem> repairItems = repairWindow.RepairItems;
                     decimal totalCost = repairItems.Sum(item => item.Cost * item.Quantity);
                     string repairSummary = repairWindow.GetRepairItemsSummary();
 
@@ -126,48 +215,22 @@ namespace CarRentApp.Views.Users.Mechanic
             }
         }
 
+        #endregion
+
+        #region Data Loading
+
+
         private void LoadCarList()
         {
-            IEnumerable<Car> cars = _carRepository.GetCars()
-                                                    .Where(car => car.CarState == CarState.InService);
-
-            if (MakeComboBox.SelectedItem != null)
-            {
-                string selectedMake = MakeComboBox.SelectedItem.ToString();
-                if (!string.IsNullOrWhiteSpace(selectedMake) && selectedMake != "All")
-                {
-                    cars = cars.Where(car => car.Make.Equals(selectedMake, StringComparison.OrdinalIgnoreCase));
-                }
-            }
-
-            if (ModelComboBox.SelectedItem != null)
-            {
-                string selectedModel = ModelComboBox.SelectedItem.ToString();
-                if (!string.IsNullOrWhiteSpace(selectedModel) && selectedModel != "All")
-                {
-                    cars = cars.Where(car => car.Model.Equals(selectedModel, StringComparison.OrdinalIgnoreCase));
-                }
-            }
-
-            if (YearComboBox.SelectedItem != null)
-            {
-                string yearSelection = YearComboBox.SelectedItem.ToString();
-                if (yearSelection != "All" && int.TryParse(yearSelection, out int selectedYear))
-                {
-                    cars = cars.Where(car => car.Year == selectedYear);
-                }
-            }
-
-            if (HorsePowerComboBox.SelectedItem != null)
-            {
-                string hpSelection = HorsePowerComboBox.SelectedItem.ToString();
-                if (hpSelection != "All" && int.TryParse(hpSelection, out int selectedHorsePower))
-                {
-                    cars = cars.Where(car => car.HorsePower == selectedHorsePower);
-                }
-            }
-
+            IEnumerable<Car> cars = GetFilteredCarsFromAll()
+                .Where(car => car.CarState == CarState.InService);
             CarDataGrid.ItemsSource = cars.ToList();
+        }
+
+        private void LoadRepairs()
+        {
+            List<Repair> repairs = _repairRepository.GetAllRepairs();
+            RepairsDataGrid.ItemsSource = repairs;
         }
 
         private void LoadUserInfo()
@@ -178,10 +241,6 @@ namespace CarRentApp.Views.Users.Mechanic
                 : "No user is currently logged in.";
         }
 
-        private void LoadRepairs()
-        {
-            List<Repair> repairs = _repairRepository.GetAllRepairs();
-            RepairsDataGrid.ItemsSource = repairs;
-        }
+        #endregion
     }
 }
