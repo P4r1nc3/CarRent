@@ -1,6 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using CarRentApp.Src.Contexts;
+using CarRentApp.Contexts;
+using CarRentApp.Models;
+using CarRentApp.Repositories;
 
 namespace CarRentApp.Views.Users.Customer
 {
@@ -9,17 +12,20 @@ namespace CarRentApp.Views.Users.Customer
         public event RoutedEventHandler? Logout;
 
         private readonly AuthContext _authContext;
-
+        private readonly RequestRepository _requestRepository;
+        private User? _currentUser;
+        
         public CustomerView(DatabaseContext dbContext)
         {
             InitializeComponent();
             _authContext = AuthContext.GetInstance();
             _authContext.CurrentUserChanged += LoadUserInfo;
-
+            _requestRepository = new RequestRepository(dbContext);
+            
             LoadUserInfo();
+            LoadRequestListByUserId();
         }
-
-        // TODO move this somewhere to not duplicate the login in all user views
+        
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             _authContext.Logout();
@@ -28,10 +34,15 @@ namespace CarRentApp.Views.Users.Customer
 
         private void LoadUserInfo()
         {
-            var currentUser = _authContext.GetCurrentUser();
-            UserInfoTextBlock.Text = currentUser != null
-                ? $"Logged in as: {currentUser.Name} {currentUser.Surname}"
+            _currentUser = _authContext.GetCurrentUser();
+            UserInfoTextBlock.Text = _currentUser != null
+                ? $"Logged in as: {_currentUser.Name} {_currentUser.Surname}"
                 : "No user is currently logged in.";
+        }
+        
+        private void LoadRequestListByUserId()
+        {
+            RequestsDataGrid.ItemsSource = _requestRepository.GetRequestsByUserId(_currentUser.Id);
         }
     }
 }

@@ -20,6 +20,39 @@
                        TextAlignment="Center"
                        Margin="0,0,0,20" />
 
+            <TabControl Width="700" Height="450">
+                <TabItem Header="Rent">
+                    <Grid Background="White" Margin="5">
+                    </Grid>
+                </TabItem>
+                <TabItem Header="History">
+                    <Grid Background="White" Margin="5">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Rented cars" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                            
+                            <DataGrid x:Name="RequestsDataGrid"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      SelectionMode="Single"
+                                      Height="300"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      Margin="0,0,0,10"
+                                      RowBackground="#DFF0D8">
+                                
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Request ID" Binding="{Binding Id}" Width="*" />
+                                    <DataGridTextColumn Header="Car ID" Binding="{Binding CarId}" Width="*" />
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="*" />
+                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="*" />
+                                    <DataGridTextColumn Header="Accepted" Binding="{Binding IsAccepted}" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            
             <!-- Logout Button -->
 			<Button Content="Logout"
                     Height="40"
