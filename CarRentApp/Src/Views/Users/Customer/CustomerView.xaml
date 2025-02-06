@@ -25,9 +25,46 @@
                     <Grid Background="White" Margin="5">
                         <StackPanel Margin="10">
                             <TextBlock Text="Pick a car for rent:" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+                            
+                            <!-- Car List -->
+                            <DataGrid x:Name="CarDataGrid"
+                                      AutoGenerateColumns="False"
+                                      SelectionMode="Single"
+                                      Height="160"
+                                      IsReadOnly="True"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False">
+
+                                <!-- Style to color rows based on CarState -->
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Style.Triggers>
+                                            <!-- Available -->
+                                            <DataTrigger Binding="{Binding CarState}" Value="Available">
+                                                <Setter Property="Background" Value="#DFF0D8"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
+
+                                <!-- Columns -->
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Make" Binding="{Binding Make}" Width="*" />
+                                    <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="*" />
+                                    <DataGridTextColumn Header="Year" Binding="{Binding Year}" Width="*" />
+                                    <DataGridTextColumn Header="Horse Power" Binding="{Binding HorsePower}" Width="*" />
+                                    <DataGridTextColumn Header="Car State" Binding="{Binding CarState}" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            
+                            <!-- Buttons for Actions -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Accept" Width="100" Margin="5" Click="RentRequest_Click"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </TabItem>
+                
                 <TabItem Header="History">
                     <Grid Background="White" Margin="5">
                         <StackPanel Margin="10" CanHorizontallyScroll="True">
