@@ -1,9 +1,10 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using CarRentApp.Src.Contexts;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Repositories;
+using Microsoft.VisualBasic.Logging;
 
 namespace CarRentApp.Views.Users.Customer
 {
@@ -13,13 +14,15 @@ namespace CarRentApp.Views.Users.Customer
 
         private readonly AuthContext _authContext;
         private readonly RequestRepository _requestRepository;
-        private User? _currentUser;
         
         public CustomerView(DatabaseContext dbContext)
         {
             InitializeComponent();
+            
             _authContext = AuthContext.GetInstance();
             _authContext.CurrentUserChanged += LoadUserInfo;
+            _authContext.CurrentUserChanged += LoadRequestListByUserId;
+            
             _requestRepository = new RequestRepository(dbContext);
             
             LoadUserInfo();
@@ -34,15 +37,16 @@ namespace CarRentApp.Views.Users.Customer
 
         private void LoadUserInfo()
         {
-            _currentUser = _authContext.GetCurrentUser();
-            UserInfoTextBlock.Text = _currentUser != null
-                ? $"Logged in as: {_currentUser.Name} {_currentUser.Surname}"
+            var currentUser = _authContext.GetCurrentUser();
+            UserInfoTextBlock.Text = currentUser != null
+                ? $"Logged in as: {currentUser.Name} {currentUser.Surname}"
                 : "No user is currently logged in.";
         }
         
         private void LoadRequestListByUserId()
         {
-            RequestsDataGrid.ItemsSource = _requestRepository.GetRequestsByUserId(_currentUser.Id);
+            var currentUser = _authContext.GetCurrentUser();
+            RequestsDataGrid.ItemsSource = currentUser != null ? _requestRepository.GetRequestsByUserIdDescending(currentUser.Id) : [];
         }
     }
 }
