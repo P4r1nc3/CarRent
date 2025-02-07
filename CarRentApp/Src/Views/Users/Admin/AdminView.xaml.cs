@@ -3,10 +3,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Repositories;
+using CarRentApp.Src.Models;
+
+
 
 namespace CarRentApp.Views.Users.Admin
 {

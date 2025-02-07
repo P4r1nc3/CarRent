@@ -1,9 +1,7 @@
-using System;
-using Xunit;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
 
-namespace CarRentApp.Tests
+namespace CarRentApp.Tests.Contexts
 {
     public class AuthContextTests
     {
@@ -16,8 +14,8 @@ namespace CarRentApp.Tests
         public void SetCurrentUser_Should_UpdateCurrentUser_And_FireEvent()
         {
             // Arrange
-            var authContext = AuthContext.GetInstance();
-            var testUser = new User
+            AuthContext authContext = AuthContext.GetInstance();
+            User testUser = new User
             {
                 Id = 1,
                 Name = "Test",
@@ -42,8 +40,8 @@ namespace CarRentApp.Tests
         public void Logout_Should_ClearCurrentUser_And_FireEvent()
         {
             // Arrange
-            var authContext = AuthContext.GetInstance();
-            var testUser = new User
+            AuthContext authContext = AuthContext.GetInstance();
+            User testUser = new User
             {
                 Id = 1,
                 Name = "Test",

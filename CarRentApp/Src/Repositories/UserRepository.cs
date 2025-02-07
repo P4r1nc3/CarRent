@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using CarRentApp.Contexts;
-using CarRentApp.Models;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
 
-namespace CarRentApp.Repositories
+namespace CarRentApp.Src.Repositories
 {
     public class UserRepository
     {
@@ -22,7 +19,7 @@ namespace CarRentApp.Repositories
                 throw new InvalidOperationException("User with the given email already exists.");
             }
 
-            var newUser = new User
+            User newUser = new User
             {
                 Name = name,
                 Surname = surname,
@@ -39,12 +36,8 @@ namespace CarRentApp.Repositories
 
         public User GetUser(int userId)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new KeyNotFoundException($"User with ID {userId} not found.");
-            }
-            return user;
+            User? user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            return user == null ? throw new KeyNotFoundException($"User with ID {userId} not found.") : user;
         }
 
         public List<User> GetUsers()
@@ -54,7 +47,7 @@ namespace CarRentApp.Repositories
 
         public void UpdateUser(int userId, string name, string surname, string email, string password, Role role)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            User? user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
             if (user != null)
             {
                 if (_dbContext.Users.Any(u => u.Email == email && u.Id != userId))
@@ -78,7 +71,7 @@ namespace CarRentApp.Repositories
 
         public void RemoveUser(int userId)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            User? user = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
             if (user != null)
             {
                 _dbContext.Users.Remove(user);
