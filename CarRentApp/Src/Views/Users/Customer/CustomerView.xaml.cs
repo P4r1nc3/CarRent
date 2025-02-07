@@ -78,6 +78,16 @@ namespace CarRentApp.Views.Users.Customer
 
         private void RentRequest_Click(object sender, RoutedEventArgs e)
         {
+
+            var startDate = StartDatePicker.SelectedDate;
+            var endDate = EndDatePicker.SelectedDate;
+
+            if (startDate.Value == null || endDate.Value == null)
+            {
+                MessageBox.Show("Please select correct rental period.", "No date selected", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+            
             var selectedRequestCar = CarDataGrid.SelectedItem as Car;
             var currentUser = _authContext.GetCurrentUser();
 
@@ -97,8 +107,7 @@ namespace CarRentApp.Views.Users.Customer
 
             try
             {
-                _requestRepository.CreateRequest(selectedRequestCar.Id, currentUser!.Id, DateTime.Now,
-                    DateTime.Today.Add(TimeSpan.FromDays(2)), false);
+                _requestRepository.CreateRequest(selectedRequestCar.Id, currentUser!.Id, startDate.Value, endDate.Value, false);
             }
             catch (Exception ex)
             {
