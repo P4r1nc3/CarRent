@@ -130,7 +130,7 @@ namespace CarRentApp.Views.Users.Mechanic
                 .ToList();
             models.Insert(0, "All");
             ModelComboBox.ItemsSource = models;
-            if (ModelComboBox.SelectedItem == null || !models.Contains(ModelComboBox.SelectedItem.ToString()))
+            if (ModelComboBox.SelectedItem == null || (ModelComboBox.SelectedItem is string selectedModel && !models.Contains(selectedModel)))
             {
                 ModelComboBox.SelectedIndex = 0;
             }
@@ -142,7 +142,7 @@ namespace CarRentApp.Views.Users.Mechanic
                 .ToList();
             years.Insert(0, "All");
             YearComboBox.ItemsSource = years;
-            if (YearComboBox.SelectedItem == null || !years.Contains(YearComboBox.SelectedItem.ToString()))
+            if (YearComboBox.SelectedItem == null || (YearComboBox.SelectedItem is string selectedYear && !years.Contains(selectedYear)))
             {
                 YearComboBox.SelectedIndex = 0;
             }
@@ -154,7 +154,7 @@ namespace CarRentApp.Views.Users.Mechanic
                 .ToList();
             horsePowers.Insert(0, "All");
             HorsePowerComboBox.ItemsSource = horsePowers;
-            if (HorsePowerComboBox.SelectedItem == null || !horsePowers.Contains(HorsePowerComboBox.SelectedItem.ToString()))
+            if (HorsePowerComboBox.SelectedItem == null || (HorsePowerComboBox.SelectedItem is string selectedHorsePower && !horsePowers.Contains(selectedHorsePower)))
             {
                 HorsePowerComboBox.SelectedIndex = 0;
             }
