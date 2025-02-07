@@ -1,18 +1,15 @@
-using System;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Services;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
-using CarRentApp.Contexts;
-using CarRentApp.Services;
 
-namespace CarRentApp.Tests
+namespace CarRentApp.Tests.Services
 {
     public class RegisterServiceTests
     {
         public RegisterServiceTests()
         {
-            var authContext = AuthContext.GetInstance();
+            AuthContext authContext = AuthContext.GetInstance();
             authContext.SetCurrentUser(null!);
         }
 
@@ -27,7 +24,7 @@ namespace CarRentApp.Tests
         public void RegisterUser_Should_RegisterUser_When_InputIsValid()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
             User result;
             string firstName = "Alice";
             string lastName = "Smith";
@@ -35,9 +32,9 @@ namespace CarRentApp.Tests
             string password = "securePassword";
 
             // Act
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var registerService = new RegisterService(context);
+                RegisterService registerService = new RegisterService(context);
                 result = registerService.RegisterUser(firstName, lastName, email, password);
             }
 
@@ -49,7 +46,7 @@ namespace CarRentApp.Tests
             Assert.Equal(password, result.Password);
             Assert.Equal(Role.Customer, result.Role);
 
-            var authContext = AuthContext.GetInstance();
+            AuthContext authContext = AuthContext.GetInstance();
             Assert.Equal(result.Id, authContext.GetCurrentUser()?.Id);
         }
 
@@ -57,60 +54,52 @@ namespace CarRentApp.Tests
         public void RegisterUser_Should_ThrowArgumentException_When_FirstNameIsEmpty()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
-            {
-                var registerService = new RegisterService(context);
-                Assert.Throws<ArgumentException>(() =>
-                    registerService.RegisterUser("", "Smith", "alice@example.com", "password"));
-            }
+            using DatabaseContext context = new DatabaseContext(options);
+            RegisterService registerService = new RegisterService(context);
+            Assert.Throws<ArgumentException>(() =>
+                registerService.RegisterUser("", "Smith", "alice@example.com", "password"));
         }
 
         [Fact]
         public void RegisterUser_Should_ThrowArgumentException_When_LastNameIsEmpty()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
-            {
-                var registerService = new RegisterService(context);
-                Assert.Throws<ArgumentException>(() =>
-                    registerService.RegisterUser("Alice", "", "alice@example.com", "password"));
-            }
+            using DatabaseContext context = new DatabaseContext(options);
+            RegisterService registerService = new RegisterService(context);
+            Assert.Throws<ArgumentException>(() =>
+                registerService.RegisterUser("Alice", "", "alice@example.com", "password"));
         }
 
         [Fact]
         public void RegisterUser_Should_ThrowArgumentException_When_EmailIsEmpty()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
-            {
-                var registerService = new RegisterService(context);
-                Assert.Throws<ArgumentException>(() =>
-                    registerService.RegisterUser("Alice", "Smith", "", "password"));
-            }
+            using DatabaseContext context = new DatabaseContext(options);
+            RegisterService registerService = new RegisterService(context);
+            Assert.Throws<ArgumentException>(() =>
+                registerService.RegisterUser("Alice", "Smith", "", "password"));
         }
 
         [Fact]
         public void RegisterUser_Should_ThrowArgumentException_When_PasswordIsEmpty()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
-            {
-                var registerService = new RegisterService(context);
-                Assert.Throws<ArgumentException>(() =>
-                    registerService.RegisterUser("Alice", "Smith", "alice@example.com", ""));
-            }
+            using DatabaseContext context = new DatabaseContext(options);
+            RegisterService registerService = new RegisterService(context);
+            Assert.Throws<ArgumentException>(() =>
+                registerService.RegisterUser("Alice", "Smith", "alice@example.com", ""));
         }
     }
 }

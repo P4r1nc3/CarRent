@@ -1,7 +1,6 @@
-using CarRentApp.Models;
-using System;
+using CarRentApp.Src.Models;
 
-namespace CarRentApp.Contexts
+namespace CarRentApp.Src.Contexts
 {
     public class AuthContext
     {

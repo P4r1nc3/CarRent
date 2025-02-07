@@ -1,14 +1,18 @@
-USE `car-rent`;
+ï»¿USE `car`;
 
+-- ====================================
 -- Insert into Users table
+-- ====================================
 INSERT INTO Users (Name, Surname, Email, Password, Role) VALUES
-('Jaros³aw', 'Janowicz', 'admin@example.com', 'password', 0),      -- Admin
-('Adam', 'Nowak', 'customer@example.com', 'password', 1),          -- Customer 1
-('Jan', 'Kowalski', 'customer1@example.com', 'password', 1),       -- Customer 2
-('Micha³', 'Wiœniewski', 'employee@example.com', 'password', 2),   -- Employee
-('Kacper', 'D¹browski', 'mechanic@example.com', 'password', 3);    -- Mechanic
+('JarosÅ‚aw', 'Janowicz', 'admin@example.com', 'password', 0),      -- Admin
+('Adam', 'Nowak', 'customer@example.com', 'password', 1),           -- Customer 1
+('Jan', 'Kowalski', 'customer1@example.com', 'password', 1),        -- Customer 2
+('MichaÅ‚', 'WiÅ›niewski', 'employee@example.com', 'password', 2),    -- Employee
+('Kacper', 'DÄ…browski', 'mechanic@example.com', 'password', 3);     -- Mechanic
 
+-- ====================================
 -- Insert into Cars table
+-- ====================================
 INSERT INTO Cars (Make, Model, Year, HorsePower, CarState) VALUES
 -- Audi
 ('Audi', 'A4', 2020, 190, 0),  -- Available
@@ -43,9 +47,18 @@ INSERT INTO Cars (Make, Model, Year, HorsePower, CarState) VALUES
 ('Toyota', 'Camry', 2020, 200, 2),        -- Rented
 ('Toyota', 'RAV4', 2021, 220, 0),         -- Available
 ('Toyota', 'Highlander', 2022, 300, 0),   -- Available
-('Toyota', 'Supra', 2023, 350, 2);        -- Rented
+('Toyota', 'Supra', 2023, 350, 2),        -- Rented
 
+-- inService (These will have IDs 26 through 30)
+('Audi', 'A8', 2024, 500, 3),          -- In Service (ID = 26)
+('BMW', 'X7', 2024, 400, 3),           -- In Service (ID = 27)
+('Ford', 'Ranger', 2024, 300, 3),      -- In Service (ID = 28)
+('Honda', 'Odyssey', 2024, 250, 3),    -- In Service (ID = 29)
+('Toyota', 'Sienna', 2024, 220, 3);    -- In Service (ID = 30)
+
+-- ====================================
 -- Insert into Requests table
+-- ====================================
 INSERT INTO Requests (CarId, UserId, StartDate, EndDate, IsAccepted) VALUES
 -- IsAccepted = FALSE
 (5, 2, '2025-03-01', '2025-03-10', FALSE),  -- Audi Q7 Reserved

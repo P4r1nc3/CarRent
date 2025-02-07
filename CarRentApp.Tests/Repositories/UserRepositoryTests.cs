@@ -1,12 +1,9 @@
-using System;
-using System.Linq;
+using CarRentApp.Src.Contexts;
+using CarRentApp.Src.Models;
+using CarRentApp.Src.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
-using CarRentApp.Models;
-using CarRentApp.Repositories;
-using CarRentApp.Contexts;
 
-namespace CarRentApp.Tests
+namespace CarRentApp.Tests.Repositories
 {
     public class UserRepositoryTests
     {
@@ -21,19 +18,19 @@ namespace CarRentApp.Tests
         public void AddUser_Should_AddUserToDatabase()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
             User addedUser;
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
+                UserRepository repository = new UserRepository(context);
                 // Act
                 addedUser = repository.AddUser("John", "Doe", "john.doe@example.com", "password123", Role.Admin);
             }
 
             // Assert
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var user = context.Users.FirstOrDefault(u => u.Id == addedUser.Id);
+                User? user = context.Users.FirstOrDefault(u => u.Id == addedUser.Id);
                 Assert.NotNull(user);
                 Assert.Equal("John", user.Name);
                 Assert.Equal("Doe", user.Surname);
@@ -47,36 +44,34 @@ namespace CarRentApp.Tests
         public void AddUser_Should_ThrowException_WhenDuplicateEmail()
         {
             // Arrange
-            var options = CreateNewContextOptions();
-            using (var context = new DatabaseContext(options))
-            {
-                var repository = new UserRepository(context);
-                // Act
-                repository.AddUser("Jane", "Doe", "jane.doe@example.com", "password", Role.Customer);
-                // Assert
-                Assert.Throws<InvalidOperationException>(() =>
-                    repository.AddUser("John", "Smith", "jane.doe@example.com", "password123", Role.Admin));
-            }
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
+            using DatabaseContext context = new DatabaseContext(options);
+            UserRepository repository = new UserRepository(context);
+            // Act
+            repository.AddUser("Jane", "Doe", "jane.doe@example.com", "password", Role.Customer);
+            // Assert
+            Assert.Throws<InvalidOperationException>(() =>
+                repository.AddUser("John", "Smith", "jane.doe@example.com", "password123", Role.Admin));
         }
 
         [Fact]
         public void GetUser_Should_ReturnUser()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
             int userId;
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
-                var user = repository.AddUser("Alice", "Wonderland", "alice@example.com", "secret", Role.Customer);
+                UserRepository repository = new UserRepository(context);
+                User user = repository.AddUser("Alice", "Wonderland", "alice@example.com", "secret", Role.Customer);
                 userId = user.Id;
             }
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
-                var user = repository.GetUser(userId);
+                UserRepository repository = new UserRepository(context);
+                User user = repository.GetUser(userId);
                 Assert.NotNull(user);
                 Assert.Equal("Alice", user.Name);
                 Assert.Equal("Wonderland", user.Surname);
@@ -90,32 +85,30 @@ namespace CarRentApp.Tests
         public void GetUser_Should_ThrowException_WhenUserNotFound()
         {
             // Arrange
-            var options = CreateNewContextOptions();
-            using (var context = new DatabaseContext(options))
-            {
-                var repository = new UserRepository(context);
-                // Act & Assert
-                Assert.Throws<KeyNotFoundException>(() => repository.GetUser(999));
-            }
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
+            using DatabaseContext context = new DatabaseContext(options);
+            UserRepository repository = new UserRepository(context);
+            // Act & Assert
+            Assert.Throws<KeyNotFoundException>(() => repository.GetUser(999));
         }
 
         [Fact]
         public void GetUsers_Should_ReturnAllUsers()
         {
             // Arrange
-            var options = CreateNewContextOptions();
-            using (var context = new DatabaseContext(options))
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
+                UserRepository repository = new UserRepository(context);
                 repository.AddUser("User1", "Last1", "user1@example.com", "pass1", Role.Admin);
                 repository.AddUser("User2", "Last2", "user2@example.com", "pass2", Role.Customer);
             }
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
-                var users = repository.GetUsers();
+                UserRepository repository = new UserRepository(context);
+                List<User> users = repository.GetUsers();
                 Assert.Equal(2, users.Count);
             }
         }
@@ -124,26 +117,26 @@ namespace CarRentApp.Tests
         public void UpdateUser_Should_UpdateUserProperties()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
             int userId;
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
-                var user = repository.AddUser("Bob", "Marley", "bob@example.com", "oldpass", Role.Customer);
+                UserRepository repository = new UserRepository(context);
+                User user = repository.AddUser("Bob", "Marley", "bob@example.com", "oldpass", Role.Customer);
                 userId = user.Id;
             }
 
             // Act
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
+                UserRepository repository = new UserRepository(context);
                 repository.UpdateUser(userId, "Bob", "Marley", "bob.new@example.com", "newpass", Role.Admin);
             }
 
             // Assert
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var user = context.Users.FirstOrDefault(u => u.Id == userId);
+                User? user = context.Users.FirstOrDefault(u => u.Id == userId);
                 Assert.NotNull(user);
                 Assert.Equal("Bob", user.Name);
                 Assert.Equal("Marley", user.Surname);
@@ -157,34 +150,32 @@ namespace CarRentApp.Tests
         public void UpdateUser_Should_ThrowException_WhenUserNotFound()
         {
             // Arrange
-            var options = CreateNewContextOptions();
-            using (var context = new DatabaseContext(options))
-            {
-                var repository = new UserRepository(context);
-                // Act & Assert
-                Assert.Throws<KeyNotFoundException>(() =>
-                    repository.UpdateUser(999, "Test", "User", "test@example.com", "pass", Role.Customer));
-            }
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
+            using DatabaseContext context = new DatabaseContext(options);
+            UserRepository repository = new UserRepository(context);
+            // Act & Assert
+            Assert.Throws<KeyNotFoundException>(() =>
+                repository.UpdateUser(999, "Test", "User", "test@example.com", "pass", Role.Customer));
         }
 
         [Fact]
         public void UpdateUser_Should_ThrowException_WhenDuplicateEmail()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
             int userId;
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
+                UserRepository repository = new UserRepository(context);
                 repository.AddUser("User1", "Last1", "unique@example.com", "pass1", Role.Admin);
-                var user2 = repository.AddUser("User2", "Last2", "other@example.com", "pass2", Role.Customer);
+                User user2 = repository.AddUser("User2", "Last2", "other@example.com", "pass2", Role.Customer);
                 userId = user2.Id;
             }
 
             // Act & Assert
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
+                UserRepository repository = new UserRepository(context);
                 Assert.Throws<InvalidOperationException>(() =>
                     repository.UpdateUser(userId, "User2", "Last2", "unique@example.com", "pass2", Role.Customer));
             }
@@ -194,26 +185,26 @@ namespace CarRentApp.Tests
         public void RemoveUser_Should_RemoveUserFromDatabase()
         {
             // Arrange
-            var options = CreateNewContextOptions();
+            DbContextOptions<DatabaseContext> options = CreateNewContextOptions();
             int userId;
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
-                var user = repository.AddUser("Charlie", "Brown", "charlie@example.com", "password", Role.Customer);
+                UserRepository repository = new UserRepository(context);
+                User user = repository.AddUser("Charlie", "Brown", "charlie@example.com", "password", Role.Customer);
                 userId = user.Id;
             }
 
             // Act
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var repository = new UserRepository(context);
+                UserRepository repository = new UserRepository(context);
                 repository.RemoveUser(userId);
             }
 
             // Assert
-            using (var context = new DatabaseContext(options))
+            using (DatabaseContext context = new DatabaseContext(options))
             {
-                var user = context.Users.FirstOrDefault(u => u.Id == userId);
+                User? user = context.Users.FirstOrDefault(u => u.Id == userId);
                 Assert.Null(user);
             }
         }
