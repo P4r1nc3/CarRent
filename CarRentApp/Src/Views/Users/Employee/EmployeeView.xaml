@@ -144,10 +144,10 @@
 								</DataGrid.Columns>
 							</DataGrid>
 
-
 							<!-- Buttons for Actions -->
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-								<Button Content="Accept" Width="100" Margin="5" Click="AcceptRequest_Click"/>
+								<Button Content="Rent" Width="100" Margin="5" Click="RentRequest_Click"/>
+								<Button Content="Reserve" Width="100" Margin="5" Click="ReserveRequest_Click"/>
 								<Button Content="Reject" Width="100" Margin="5" Click="RejectRequest_Click"/>
 							</StackPanel>
 						</StackPanel>

@@ -47,6 +47,11 @@ namespace CarRentApp.Src.Repositories
             return _dbContext.Requests.ToList();
         }
 
+        public List<Request> GetRequestsByUserIdDescending(int userId)
+        {
+            return _dbContext.Requests.Where(r => r.UserId == userId).OrderByDescending(r => r.EndDate).ToList();
+        }
+        
         public void UpdateRequest(int requestId, int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
         {
             Request? request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
