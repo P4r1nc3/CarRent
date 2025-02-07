@@ -70,7 +70,49 @@ namespace CarRentApp.Views.Users.Employee
             }
         }
 
-        private void AcceptRequest_Click(object sender, RoutedEventArgs e)
+        private void RentRequest_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedRequest = RequestsDataGrid.SelectedItem as Request;
+
+            if (selectedRequest == null)
+            {
+                MessageBox.Show("Please select a request to accept.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                // Update request status to "Accepted"
+                _requestRepository.UpdateRequest(
+                    selectedRequest.Id,
+                    selectedRequest.CarId,
+                    selectedRequest.UserId,
+                    selectedRequest.StartDate,
+                    selectedRequest.EndDate,
+                    true);
+
+                // Update car state to "Rented"
+                var car = _carRepository.GetCar(selectedRequest.CarId);
+                _carRepository.UpdateCar(
+                    car.Id,
+                    car.Make,
+                    car.Model,
+                    car.Year,
+                    car.HorsePower,
+                    CarState.Rented);
+
+                LoadRequestList();
+                LoadCarList();
+
+                MessageBox.Show("Request accepted and car state updated to Rented!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
+        private void ReserveRequest_Click(object sender, RoutedEventArgs e)
         {
             var selectedRequest = RequestsDataGrid.SelectedItem as Request;
 
@@ -93,16 +135,13 @@ namespace CarRentApp.Views.Users.Employee
 
                 // Update car state to "Reserved"
                 var car = _carRepository.GetCar(selectedRequest.CarId);
-                if (car != null)
-                {
-                    _carRepository.UpdateCar(
-                        car.Id,
-                        car.Make,
-                        car.Model,
-                        car.Year,
-                        car.HorsePower,
-                        CarState.Reserved);
-                }
+                _carRepository.UpdateCar(
+                    car.Id,
+                    car.Make,
+                    car.Model,
+                    car.Year,
+                    car.HorsePower,
+                    CarState.Reserved);
 
                 LoadRequestList();
                 LoadCarList();
