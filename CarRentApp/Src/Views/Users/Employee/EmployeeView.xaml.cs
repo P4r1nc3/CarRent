@@ -174,7 +174,19 @@ namespace CarRentApp.Views.Users.Employee
                     selectedRequest.EndDate,
                     false);
 
+                // Update car state to "Available"
+                var car = _carRepository.GetCar(selectedRequest.CarId);
+                _carRepository.UpdateCar(
+                    car.Id,
+                    car.Make,
+                    car.Model,
+                    car.Year,
+                    car.HorsePower,
+                    CarState.Available);
+                
                 LoadRequestList();
+                LoadCarList();
+                
                 MessageBox.Show("Request rejected successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
