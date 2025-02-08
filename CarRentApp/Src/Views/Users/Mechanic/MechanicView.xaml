@@ -55,8 +55,13 @@
                           SelectionChanged="FilterComboBox_SelectionChanged" />
                             </StackPanel>
 
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                             <Button Content="Set as repaired" Width="120" Height="30" Margin="0,10" HorizontalAlignment="Left"
-                      Click="SetAsRepaired_Click"/>
+                                    Click="SetAsRepaired_Click"/>
+                                <Button Content="Set as unavailable" Width="120" Height="30" Margin="5,10" HorizontalAlignment="Left"
+                                    Click="SetAsNotRepaired_Click"/>
+                                <Button Content="Refresh" Width="120" Height="30" Margin="0,10" HorizontalAlignment="Left" Click="Refresh_Click"/>
+                            </StackPanel>
 
                             <!-- Ongoing repairs list (e.g. cars in service) -->
                             <DataGrid x:Name="CarDataGrid"

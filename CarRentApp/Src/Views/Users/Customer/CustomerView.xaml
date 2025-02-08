@@ -91,21 +91,41 @@
                     <Grid Background="White" Margin="5">
                         <StackPanel Margin="10" CanHorizontallyScroll="True">
                             <TextBlock Text="Rented cars" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
-                            
+
                             <DataGrid x:Name="RequestsDataGrid"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"
                                       Height="Auto"
                                       CanUserAddRows="False"
-                                      CanUserDeleteRows="False"
-                                      RowBackground="#DFF0D8">
-                                
+                                      CanUserDeleteRows="False">
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Style.Triggers>
+                                            <!-- Available -->
+                                            <DataTrigger Binding="{Binding Status}" Value="Requested">
+                                                <Setter Property="Background" Value="#a2a3a1"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Reserved">
+                                                <Setter Property="Background" Value="#DFF0D8"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Rented">
+                                                <Setter Property="Background" Value="#b0e59c"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Rejected">
+                                                <Setter Property="Background" Value="#b7596b"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
+
+
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Car Make" Binding="{Binding CarMake}" Width="*" />
                                     <DataGridTextColumn Header="Car Model" Binding="{Binding CarModel}" Width="*" />
                                     <DataGridTextColumn Header="Car Year" Binding="{Binding CarYear}" Width="*" />
-                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="*" />
-                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="*" />
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat={}{0:d}}" Width="*" />
+                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat={}{0:d}}" Width="*" />
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>

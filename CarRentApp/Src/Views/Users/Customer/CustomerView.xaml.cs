@@ -54,7 +54,6 @@ namespace CarRentApp.Views.Users.Customer
             
             RequestsDataGrid.ItemsSource = currentUser != null ? _requestRepository
                 .GetRequestsByUserIdDescending(currentUser!.Id)
-                .Where(r => r.IsAccepted)
                 .Join<Request, Car, int, object>(
                     _allCars,
                     request => request.CarId,
@@ -66,6 +65,7 @@ namespace CarRentApp.Views.Users.Customer
                         CarYear = car.Year,
                         StartDate = req.StartDate,
                         EndDate = req.EndDate,
+                        Status = req.RequestState
                     }
                 )
                 .ToList() : [];
@@ -82,12 +82,20 @@ namespace CarRentApp.Views.Users.Customer
             var startDate = StartDatePicker.SelectedDate;
             var endDate = EndDatePicker.SelectedDate;
 
-            if (startDate.Value == null || endDate.Value == null)
+            if (startDate == null || endDate == null)
             {
                 MessageBox.Show("Please select correct rental period.", "No date selected", MessageBoxButton.OK,
                     MessageBoxImage.Warning);
+                return;
             }
-            
+
+            if (startDate > endDate)
+            {
+                MessageBox.Show("Please select correct rental period.", "No date selected", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
             var selectedRequestCar = CarDataGrid.SelectedItem as Car;
             var currentUser = _authContext.GetCurrentUser();
 
@@ -107,7 +115,11 @@ namespace CarRentApp.Views.Users.Customer
 
             try
             {
-                _requestRepository.CreateRequest(selectedRequestCar.Id, currentUser!.Id, startDate.Value, endDate.Value, false);
+                _requestRepository.CreateRequest(selectedRequestCar.Id, currentUser!.Id, startDate!.Value, endDate!.Value, RequestState.Requested);
+                MessageBox.Show("Rent request is being processed", "Renting", MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                LoadRequestListByUserId();
+                return;
             }
             catch (Exception ex)
             {
