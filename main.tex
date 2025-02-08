@@ -1,0 +1,278 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\graphicspath{{./}}
+
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+\title{Zaawansowane interfejsy graficzne - Projekt}
+\author{Konrad Tupta, Wojciech Lotko, Kacper Piatkowski, Jaroslaw Skwarek}
+\date{\today}
+
+\begin{document}
+    
+\begin{titlepage}
+    \centering
+    \vspace*{1in}
+    \Huge
+    \textbf{Zaawansowane interfejsy graficzne}
+    
+    \vspace{0.5in}
+    \LARGE
+    Wypożyczalnia samochodów osobowych 
+    
+    \vfill
+    \Large
+    \textbf{Spis członków zespołu:}\\
+    Konrad Tupta\\
+    Wojciech Lotko\\
+    Kacper Piątkowski\\
+    Jarosław Skwarek\\
+\end{titlepage}
+
+\section{Opis projektu}
+
+\subsection{Funkcjonalności i role}
+W projekcie występuje podział na role użytkowników w których skład wchodzą:
+
+\begin{itemize}
+    \item Klient
+    \item Pracownik
+    \item Mechanik
+    \item Administrator
+\end{itemize}
+
+Każdy użytkownik korzystający z aplikacji ma dostęp do funkjonalności tożsamych z daną rolą przypisaną do jego konta:
+
+\begin{enumerate}
+    \item Klient:
+    \begin{itemize}
+        \item Historia wynajętych samochodów
+        \item Rezerwacja samochodu
+    \end{itemize}
+    \item Pracownik:
+    \begin{itemize}
+        \item Dostęp do listy wszystkich samochodów w systemie
+        \item Dodawanie nowych samochodów
+        \item Akceptacja lub odrzucenie prośby o wynajęcie samochodu
+        \item Przekazanie samochodu do naprawy
+    \end{itemize}
+    \item Mechanik:
+    \begin{itemize}
+        \item Dostęp do listy samochodów do naprawy
+        \item Dostęp do historii samochodów do naprawy
+        \item Oznaczenie samochodu jako naprawionego i dodanie opisu napraw
+        \item Oznaczenie samochodu jako 'nienaprawialnego'
+    \end{itemize}
+    \item Administrator:
+    \begin{itemize}
+        \item Dostęp do listy kont użytkowników
+        \item Tworzenie kont użytkowników
+        \item Modyfikowanie istniejących kont użytkowników
+        \item Usuwanie kont użytkowników
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Wymagania}
+
+Do uruchomienia projektu wymagane są:
+\begin{itemize}
+    \item SDK .NET 6.0+
+    \item MySQL Server lub kompatybilna baza danych
+\end{itemize}
+\vspace{1em}
+
+\subsection{Instalacja}
+
+\begin{enumerate}
+    \item Skolonuj repozytorium i przejdź do katalogu projektu:
+    \begin{lstlisting}[language=bash] 
+cd CarRent 
+    \end{lstlisting}
+    \item Przywróć pakiety NuGet:
+    \begin{lstlisting}[language=bash] 
+dotnet restore
+    \end{lstlisting}
+\end{enumerate}
+\vspace{1em}
+
+\subsection{Konfiguracja}
+Aby skonfigurować połączenie z bazą danych, należy ustawić zmienną środowisk-ową, która będzie przechowywać napis do połączenia:
+
+\begin{lstlisting}[language=bash, breaklines=true] 
+    # Example
+    CAR_RENT_DB_CONNECTION=
+    "server=x;database=x;user=x;password=x"
+\end{lstlisting}
+\vspace{1em}
+
+\subsection{Tworzenie bazy danych}
+
+\begin{enumerate}
+    \item Zainstaluj narzędzie Entity Framework Core:
+    \begin{lstlisting}[language=bash] 
+dotnet tool install --global dotnet-ef
+    \end{lstlisting}
+    \item Utwórz pierwszą migrację:
+    \begin{lstlisting}[language=bash] 
+dotnet ef migrations add InitialCreate
+    \end{lstlisting}
+    \item Zaktualizuj bazę danych
+    \begin{lstlisting}[language=bash] 
+dotnet ef database update
+    \end{lstlisting}
+\end{enumerate}
+\vspace{1em}
+
+\subsection{Uruchomienie aplikacji}
+Aby uruchomić aplikację, należy wykonać polecenia:
+\begin{lstlisting}[language=bash] 
+    dotnet run
+\end{lstlisting}
+
+\vspace{1em}
+
+\subsection{Zależności}
+Projekt korzysta z następujących pakietów:
+
+\begin{itemize}
+    \item \textbf{Microsoft.EntityFrameworkCore} (v8.0.2)
+    \item \textbf{Microsoft.EntityFrameworkCore.Design} (v8.0.2)
+    \item \textbf{Microsoft.EntityFrameworkCore.SqlServer} (v8.0.2)
+    \item \textbf{Microsoft.EntityFrameworkCore.Tools} (v8.0.2)
+    \item \textbf{MySql.EntityFrameworkCore} (v8.0.0)
+    \item \textbf{Pomelo.EntityFrameworkCore.MySql} (v8.0.0)
+\end{itemize}
+
+\section{Jak używać aplikacji}
+
+Funkcjonalności podzielone zostały ze względu na rolę użytkownika. Aby mieć do nich dostęp, należy zalogować się do odpowiadających ról.
+
+\subsection{Administrator}
+\vspace{1em}
+
+\textbf{Funkcjonalności:}
+\vspace{1em}
+
+\textbf{Dodanie użytkownika:}
+
+\begin{enumerate}
+    \item Wypełnić dane \textit{Firstname, Surname, Email, Role}
+    \item Nacisnąć przycisk 'Add user'
+\end{enumerate}
+
+\textbf{Modyfikacja użytkownika:}
+
+\begin{enumerate}
+    \item Otworzyć okno kontekstowe użytkownika za pomocą prawego przycisku myszy
+    \item Wybrać opcję 'Edit'
+    \item Zmodyfikować informacje użytkownika
+    \item Nacisnąć przycisk 'Save'
+\end{enumerate}
+
+\textbf{Usunięcie użytkownika:}
+
+\begin{enumerate}
+    \item Otworzyć okno kontekstowe użytkownika za pomocą prawego przycisku myszy
+    \item Wybrać opcję 'Delete'
+    \item Potwierdzić chęć usunięcia użytkownika
+\end{enumerate}
+
+\subsection{Pracownik}
+\vspace{1em}
+
+\textbf{Funkcjonalności:}
+\vspace{1em}
+
+\textbf{Dodanie samochodu:}
+
+\begin{enumerate}
+    \item Wypełnić dane \textit{Make, Model, Year, Horse Power, Car State}
+    \item Nacisnąć przycisk 'Add Car'
+\end{enumerate}
+
+\textbf{Akceptacja rezerwacji samochodu:}
+
+\begin{enumerate}
+    \item Pzejść do zakładki 'Requests'
+    \item Wybrać wiersz z prośbą o rezerwację / wynajęcie
+    \item Nacisnąć przycisk 'Reserve'
+\end{enumerate}
+
+\textbf{Wynajęcie samochodu:}
+
+\begin{enumerate}
+    \item Pzejść do zakładki 'Requests'
+    \item Wybrać wiersz z prośbą o rezerwację / wynajęcie
+    \item Nacisnąć przycisk 'Rent'
+\end{enumerate}
+
+\textbf{Odrzucenie rezerwacji samochodu:}
+
+\begin{enumerate}
+    \item Pzejść do zakładki 'Requests'
+    \item Wybrać wiersz z prośbą o rezerwację / wynajęcie
+    \item Nacisnąć przycisk 'Reject'
+\end{enumerate}
+
+\textbf{Przekazanie samochodu do mechanika:}
+
+\begin{enumerate}
+    \item Pzejść do zakładki 'Requests'
+    \item Wybrać wiersz z samochodem w dowolnym stanie wynajęcia
+    \item Nacisnąć przycisk 'Send to service'
+\end{enumerate}
+
+\subsection{Mechanik}
+
+\textbf{Funkcjonalności:}
+\vspace{1em}
+
+\textbf{Zmiana stanu samochodu na naprawiony:}
+
+\begin{enumerate}
+    \item Wybrać wiersz z samochodem do naprawy
+    \item Nacisnąć przycisk 'Set as repaired'
+    \item W oknie kontekstowym wypełnić pola \textit{Description, Cost, Quantity}
+    \item Potwierdzić przyciskiem 'OK'
+\end{enumerate}
+
+\begin{enumerate}
+    \item Wybrać wiersz z samochodem do zmiany statusu
+    \item Nacisnąć przycisk 'Set as unavailable'
+    \item Potwierdzić przyciskiem 'OK'
+\end{enumerate}
+
+\subsection{Klient}
+\textbf{Funkcjonalności:}
+\vspace{1em}
+
+\textbf{Prośba o wynajęcie samochodu:}
+
+\begin{enumerate}
+    \item Wybrać wiersz z samochodem do wynajęcia
+    \item Wypełnić datę odbioru i zdania samochodu
+    \item Nacisnąć przycisk 'Rent'
+\end{enumerate}
+
+\subsection{Przykładowy scenariusz}
+\vspace{1em}
+
+\begin{enumerate}
+    \item Administrator dodaje użytkownika z rolami pracownika i mechanika 
+    \item Klient tworzy swoje własne konto za pomocą panelu rejestracyjnego
+    \item Pracownik dodaje samochód w aplikacji
+    \item Klient wysyła prośbę o zaakceptowanie wynajęcia auta
+    \item Pracownik akceptuje wynajęcie, stan auta zostaje zmieniony na 'Reserved'
+    \item Gdy klient odbiera klucze do auta w salonie, pracownik zmienia stan auta na 'Rented'
+\end{enumerate}
+
+\end{document}
