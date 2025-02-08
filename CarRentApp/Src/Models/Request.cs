@@ -25,6 +25,6 @@ namespace CarRentApp.Src.Models
         public required DateTime EndDate { get; set; }
 
         [Required]
-        public required bool IsAccepted { get; set; }
+        public required RequestState RequestState { get; set; }
     }
 }

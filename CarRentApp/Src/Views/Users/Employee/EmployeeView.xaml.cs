@@ -15,6 +15,7 @@ namespace CarRentApp.Views.Users.Employee
         private readonly AuthContext _authContext;
         private readonly CarRepository _carRepository;
         private readonly RequestRepository _requestRepository;
+        private readonly UserRepository _userRepository;
 
         public EmployeeView(DatabaseContext dbContext)
         {
@@ -25,6 +26,7 @@ namespace CarRentApp.Views.Users.Employee
 
             _carRepository = new CarRepository(dbContext);
             _requestRepository = new RequestRepository(dbContext);
+            _userRepository = new UserRepository(dbContext);
 
             LoadUserInfo();
             LoadCarList();
@@ -72,24 +74,35 @@ namespace CarRentApp.Views.Users.Employee
 
         private void RentRequest_Click(object sender, RoutedEventArgs e)
         {
-            var selectedRequest = RequestsDataGrid.SelectedItem as Request;
-
-            if (selectedRequest == null)
+            if (RequestsDataGrid.SelectedItem == null)
             {
-                MessageBox.Show("Please select a request to accept.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please select a request to reject.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            var requestId = RequestsDataGrid.SelectedItem?.GetType()?.GetProperty("Id")?.GetValue(RequestsDataGrid.SelectedItem) ?? 0;
+            var selectedRequest = _requestRepository.GetRequest(
+                (int)requestId
+            );
 
             try
             {
-                // Update request status to "Accepted"
-                _requestRepository.UpdateRequest(
+                if (selectedRequest.RequestState == RequestState.Rejected)
+                {
+                    MessageBox.Show("This request was already rejected", "Already rejected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (selectedRequest.RequestState == RequestState.Rented)
+                { return; }
+
+                    // Update request status to "Accepted"
+                    _requestRepository.UpdateRequest(
                     selectedRequest.Id,
                     selectedRequest.CarId,
                     selectedRequest.UserId,
                     selectedRequest.StartDate,
                     selectedRequest.EndDate,
-                    true);
+                    RequestState.Rented);
 
                 // Update car state to "Rented"
                 var car = _carRepository.GetCar(selectedRequest.CarId);
@@ -114,16 +127,33 @@ namespace CarRentApp.Views.Users.Employee
         
         private void ReserveRequest_Click(object sender, RoutedEventArgs e)
         {
-            var selectedRequest = RequestsDataGrid.SelectedItem as Request;
-
-            if (selectedRequest == null)
+            if (RequestsDataGrid.SelectedItem == null)
             {
-                MessageBox.Show("Please select a request to accept.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please select a request to reject.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            var requestId = RequestsDataGrid.SelectedItem?.GetType()?.GetProperty("Id")?.GetValue(RequestsDataGrid.SelectedItem) ?? 0;
+            var selectedRequest = _requestRepository.GetRequest(
+                (int)requestId
+            );
 
             try
             {
+                if (selectedRequest.RequestState == RequestState.Rejected)
+                {
+                    MessageBox.Show("This request was already rejected", "Already rejected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (selectedRequest.RequestState == RequestState.Rented)
+                {
+                    MessageBox.Show("This request was already rented", "Already rented", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (selectedRequest.RequestState == RequestState.Reserved)
+                { return; }
+
                 // Update request status to "Accepted"
                 _requestRepository.UpdateRequest(
                     selectedRequest.Id,
@@ -131,7 +161,7 @@ namespace CarRentApp.Views.Users.Employee
                     selectedRequest.UserId,
                     selectedRequest.StartDate,
                     selectedRequest.EndDate,
-                    true);
+                    RequestState.Reserved);
 
                 // Update car state to "Reserved"
                 var car = _carRepository.GetCar(selectedRequest.CarId);
@@ -156,23 +186,35 @@ namespace CarRentApp.Views.Users.Employee
 
         private void RejectRequest_Click(object sender, RoutedEventArgs e)
         {
-            var selectedRequest = RequestsDataGrid.SelectedItem as Request;
 
-            if (selectedRequest == null)
+            if (RequestsDataGrid.SelectedItem == null)
             {
                 MessageBox.Show("Please select a request to reject.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            var requestId = RequestsDataGrid.SelectedItem?.GetType()?.GetProperty("Id")?.GetValue(RequestsDataGrid.SelectedItem) ?? 0;
+            var selectedRequest = _requestRepository.GetRequest(
+                (int)requestId
+            );
+
+            if (selectedRequest.RequestState == RequestState.Rejected)
+            { return; }
 
             try
             {
+                if (selectedRequest.RequestState == RequestState.Rented)
+                {
+                    MessageBox.Show("This request was already rented", "Already rented", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 _requestRepository.UpdateRequest(
                     selectedRequest.Id,
                     selectedRequest.CarId,
                     selectedRequest.UserId,
                     selectedRequest.StartDate,
                     selectedRequest.EndDate,
-                    false);
+                    RequestState.Rejected);
 
                 // Update car state to "Available"
                 var car = _carRepository.GetCar(selectedRequest.CarId);
@@ -188,6 +230,55 @@ namespace CarRentApp.Views.Users.Employee
                 LoadCarList();
                 
                 MessageBox.Show("Request rejected successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void RefreshRequest_Click(object sender, RoutedEventArgs e)
+        {
+            LoadCarList();
+            LoadRequestList();
+        }
+
+        private void SendToService_Click(object sender, RoutedEventArgs e)
+        {
+            if (RequestsDataGrid.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a request to reject.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            var requestId = RequestsDataGrid.SelectedItem?.GetType()?.GetProperty("Id")?.GetValue(RequestsDataGrid.SelectedItem) ?? 0;
+            var selectedRequest = _requestRepository.GetRequest(
+                (int)requestId
+            );
+
+            try
+            {
+                _requestRepository.UpdateRequest(
+                    selectedRequest.Id,
+                    selectedRequest.CarId,
+                    selectedRequest.UserId,
+                    selectedRequest.StartDate,
+                    selectedRequest.EndDate,
+                    RequestState.Rejected);
+
+                // Update car state to "Available"
+                var car = _carRepository.GetCar(selectedRequest.CarId);
+                _carRepository.UpdateCar(
+                    car.Id,
+                    car.Make,
+                    car.Model,
+                    car.Year,
+                    car.HorsePower,
+                    CarState.InService);
+
+                LoadRequestList();
+                LoadCarList();
+
+                MessageBox.Show("Request rejected successfully! Car is marked as InService", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
@@ -222,7 +313,31 @@ namespace CarRentApp.Views.Users.Employee
 
         private void LoadRequestList()
         {
-            RequestsDataGrid.ItemsSource = _requestRepository.GetRequests();
+            RequestsDataGrid.ItemsSource = _requestRepository.GetRequests()
+            .Join(
+                _userRepository.GetUsers(),
+                r => r.UserId,
+                u => u.Id,
+                (r, u) =>
+                new
+                {
+                    r,
+                    u
+                }).Join(
+                    _carRepository.GetCars(),
+                    ur => ur.r.CarId,
+                    c => c.Id,
+                    (ur, c) =>
+                    new
+                    {
+                        Id = ur.r.Id,
+                        CarString = $"{c.Make} {c.Model} {c.Year}",
+                        Email = ur.u.Email,
+                        StartDate = ur.r.StartDate,
+                        EndDate = ur.r.EndDate,
+                        Status = ur.r.RequestState,
+                    }
+                );
         }
 
         private void ClearCarForm()
