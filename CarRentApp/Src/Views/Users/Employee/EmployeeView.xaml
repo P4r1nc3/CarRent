@@ -117,30 +117,34 @@
 									  Margin="0,0,0,10">
 
 								<!-- Define Style for Row Coloring -->
-								<DataGrid.RowStyle>
-									<Style TargetType="DataGridRow">
-										<Style.Triggers>
-											<!-- Trigger for Accepted = true -->
-											<DataTrigger Binding="{Binding IsAccepted}" Value="True">
-												<Setter Property="Background" Value="#DFF0D8"/>
-											</DataTrigger>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Style.Triggers>
+                                            <!-- Available -->
+                                            <DataTrigger Binding="{Binding Status}" Value="Requested">
+                                                <Setter Property="Background" Value="#a2a3a1"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Reserved">
+                                                <Setter Property="Background" Value="#DFF0D8"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Rented">
+                                                <Setter Property="Background" Value="#b0e59c"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Rejected">
+                                                <Setter Property="Background" Value="#b7596b"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
 
-											<!-- Trigger for Accepted = false -->
-											<DataTrigger Binding="{Binding IsAccepted}" Value="False">
-												<Setter Property="Background" Value="#D9D9D9"/>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</DataGrid.RowStyle>
-
-								<!-- Define Columns -->
+                                <!-- Define Columns -->
 								<DataGrid.Columns>
-									<DataGridTextColumn Header="Request ID" Binding="{Binding Id}" Width="*" />
-									<DataGridTextColumn Header="Car ID" Binding="{Binding CarId}" Width="*" />
-									<DataGridTextColumn Header="User ID" Binding="{Binding UserId}" Width="*" />
-									<DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="*" />
-									<DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="*" />
-									<DataGridTextColumn Header="Accepted" Binding="{Binding IsAccepted}" Width="*" />
+                                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*" />
+                                    <DataGridTextColumn Header="Car" Binding="{Binding CarString}" Width="*" />
+									<DataGridTextColumn Header="User" Binding="{Binding Email}" Width="*" />
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat={}{0:d}}" Width="*" />
+                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat={}{0:d}}" Width="*" />
+									<DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
 								</DataGrid.Columns>
 							</DataGrid>
 
@@ -148,8 +152,10 @@
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 								<Button Content="Rent" Width="100" Margin="5" Click="RentRequest_Click"/>
 								<Button Content="Reserve" Width="100" Margin="5" Click="ReserveRequest_Click"/>
-								<Button Content="Reject" Width="100" Margin="5" Click="RejectRequest_Click"/>
-							</StackPanel>
+                                <Button Content="Reject" Width="100" Margin="5" Click="RejectRequest_Click"/>
+                                <Button Content="Refresh" Width="100" Margin="5" Click="RefreshRequest_Click"/>
+                                <Button Content="Send to service" Width="100" Margin="5" Click="SendToService_Click"/>
+                            </StackPanel>
 						</StackPanel>
 					</Grid>
 				</TabItem>

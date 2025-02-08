@@ -1,4 +1,4 @@
-﻿USE `car`;
+﻿USE `car-rent`;
 
 -- ====================================
 -- Insert into Users table
@@ -59,18 +59,18 @@ INSERT INTO Cars (Make, Model, Year, HorsePower, CarState) VALUES
 -- ====================================
 -- Insert into Requests table
 -- ====================================
-INSERT INTO Requests (CarId, UserId, StartDate, EndDate, IsAccepted) VALUES
+INSERT INTO Requests (CarId, UserId, StartDate, EndDate, RequestState) VALUES
 -- IsAccepted = FALSE
-(5, 2, '2025-03-01', '2025-03-10', FALSE),  -- Audi Q7 Reserved
-(10, 3, '2025-03-02', '2025-03-12', FALSE), -- Honda Civic Reserved
-(15, 2, '2025-03-05', '2025-03-15', FALSE), -- BMW X5 Reserved
-(12, 3, '2025-03-07', '2025-03-17', FALSE), -- Ford Mustang Reserved
+(5, 2, '2025-03-01', '2025-03-10', 1),  -- Audi Q7 Reserved
+(10, 3, '2025-03-02', '2025-03-12', 1), -- Honda Civic Reserved
+(15, 2, '2025-03-05', '2025-03-15', 1), -- BMW X5 Reserved
+(12, 3, '2025-03-07', '2025-03-17', 1), -- Ford Mustang Reserved
 
 -- IsAccepted = TRUE
-(20, 2, '2025-03-03', '2025-03-13', TRUE),  -- Toyota Supra Rented
-(15, 3, '2025-03-04', '2025-03-14', TRUE),  -- BMW X5 Rented
-(19, 2, '2025-03-06', '2025-03-16', TRUE),  -- Honda Pilot Rented
-(18, 3, '2025-03-08', '2025-03-18', TRUE);  -- Toyota Camry Rented
+(20, 2, '2025-03-03', '2025-03-13', 2),  -- Toyota Supra Rented
+(15, 3, '2025-03-04', '2025-03-14', 2),  -- BMW X5 Rented
+(19, 2, '2025-03-06', '2025-03-16', 2),  -- Honda Pilot Rented
+(18, 3, '2025-03-08', '2025-03-18', 2);  -- Toyota Camry Rented
 
 -- ====================================
 -- Insert into Repairs table

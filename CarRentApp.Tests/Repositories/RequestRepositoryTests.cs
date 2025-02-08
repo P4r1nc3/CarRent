@@ -41,7 +41,7 @@ namespace CarRentApp.Tests.Repositories
                 (int carId, int userId) = SetupCarAndUser(context);
                 RequestRepository requestRepo = new RequestRepository(context);
                 // Act
-                requestRepo.CreateRequest(carId, userId, startDate, endDate, false);
+                requestRepo.CreateRequest(carId, userId, startDate, endDate, RequestState.Requested);
                 requestId = context.Requests.First().Id;
             }
 
@@ -53,7 +53,7 @@ namespace CarRentApp.Tests.Repositories
                 Assert.NotNull(request);
                 Assert.Equal(startDate, request.StartDate);
                 Assert.Equal(endDate, request.EndDate);
-                Assert.False(request.IsAccepted);
+                Assert.Equal(RequestState.Requested, request.RequestState);
                 Assert.Equal(context.Cars.First().Id, request.CarId);
                 Assert.Equal(context.Users.First().Id, request.UserId);
             }
@@ -72,7 +72,7 @@ namespace CarRentApp.Tests.Repositories
             {
                 (int carId, int userId) = SetupCarAndUser(context);
                 RequestRepository requestRepo = new RequestRepository(context);
-                requestRepo.CreateRequest(carId, userId, startDate, endDate, true);
+                requestRepo.CreateRequest(carId, userId, startDate, endDate, RequestState.Rented);
                 requestId = context.Requests.First().Id;
             }
 
@@ -82,7 +82,7 @@ namespace CarRentApp.Tests.Repositories
                 RequestRepository requestRepo = new RequestRepository(context);
                 Request request = requestRepo.GetRequest(requestId);
                 Assert.NotNull(request);
-                Assert.True(request.IsAccepted);
+                Assert.Equal(RequestState.Rented, request.RequestState);
             }
         }
 
@@ -106,8 +106,8 @@ namespace CarRentApp.Tests.Repositories
             {
                 RequestRepository requestRepo = new RequestRepository(context);
                 (int carId, int userId) = SetupCarAndUser(context);
-                requestRepo.CreateRequest(carId, userId, DateTime.Now, DateTime.Now.AddDays(2), false);
-                requestRepo.CreateRequest(carId, userId, DateTime.Now.AddDays(3), DateTime.Now.AddDays(5), true);
+                requestRepo.CreateRequest(carId, userId, DateTime.Now, DateTime.Now.AddDays(2), RequestState.Rented);
+                requestRepo.CreateRequest(carId, userId, DateTime.Now.AddDays(3), DateTime.Now.AddDays(5), RequestState.Rented);
             }
 
             // Act & Assert
@@ -133,7 +133,7 @@ namespace CarRentApp.Tests.Repositories
             {
                 (carId, userId) = SetupCarAndUser(context);
                 RequestRepository requestRepo = new RequestRepository(context);
-                requestRepo.CreateRequest(carId, userId, startDate, endDate, false);
+                requestRepo.CreateRequest(carId, userId, startDate, endDate, RequestState.Rented);
                 requestId = context.Requests.First().Id;
             }
 
@@ -144,7 +144,7 @@ namespace CarRentApp.Tests.Repositories
             using (DatabaseContext context = new DatabaseContext(options))
             {
                 RequestRepository requestRepo = new RequestRepository(context);
-                requestRepo.UpdateRequest(requestId, carId, userId, newStartDate, newEndDate, true);
+                requestRepo.UpdateRequest(requestId, carId, userId, newStartDate, newEndDate, RequestState.Rented);
             }
 
             // Assert
@@ -155,7 +155,7 @@ namespace CarRentApp.Tests.Repositories
                 Assert.NotNull(request);
                 Assert.Equal(newStartDate, request.StartDate);
                 Assert.Equal(newEndDate, request.EndDate);
-                Assert.True(request.IsAccepted);
+                Assert.Equal(RequestState.Rented, request.RequestState);
             }
         }
 
@@ -169,7 +169,7 @@ namespace CarRentApp.Tests.Repositories
             {
                 (int carId, int userId) = SetupCarAndUser(context);
                 RequestRepository requestRepo = new RequestRepository(context);
-                requestRepo.CreateRequest(carId, userId, DateTime.Now, DateTime.Now.AddDays(2), false);
+                requestRepo.CreateRequest(carId, userId, DateTime.Now, DateTime.Now.AddDays(2), RequestState.Rented);
                 requestId = context.Requests.First().Id;
             }
 

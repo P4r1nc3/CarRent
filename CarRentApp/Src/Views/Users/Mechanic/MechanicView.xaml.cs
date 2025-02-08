@@ -215,9 +215,49 @@ namespace CarRentApp.Views.Users.Mechanic
             }
         }
 
+        private void SetAsNotRepaired_Click(object sender, RoutedEventArgs e)
+        {
+            if (CarDataGrid.SelectedItem is Car selectedCar)
+            {
+                _carRepository.UpdateCar(
+                    selectedCar.Id,
+                    selectedCar.Make,
+                    selectedCar.Model,
+                    selectedCar.Year,
+                    selectedCar.HorsePower,
+                    CarState.Unavailable
+                );
+
+                MessageBox.Show(
+                        $"Car marked as Unavailable (Car cannot be fixed)",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+
+                LoadCarList();
+                LoadRepairs();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Please select a car row before setting it as destroyed.",
+                    "No Car Selected",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+            }
+        }
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            LoadCarList();
+            LoadRepairs();
+        }
+
         #endregion
 
-        #region Data Loading
+            #region Data Loading
 
 
         private void LoadCarList()
