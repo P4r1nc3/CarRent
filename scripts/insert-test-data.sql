@@ -1,4 +1,4 @@
-﻿﻿USE `car`;
+﻿USE `car-rent`;
 
 -- ====================================
 -- Insert into Users table
