@@ -16,7 +16,7 @@ namespace CarRentApp.Src.Repositories
             _userRepository = new UserRepository(dbContext);
         }
 
-        public void CreateRequest(int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
+        public void CreateRequest(int carId, int userId, DateTime startDate, DateTime endDate, RequestState State)
         {
             Models.Car car = _carRepository.GetCar(carId);
             User user = _userRepository.GetUser(userId);
@@ -29,7 +29,7 @@ namespace CarRentApp.Src.Repositories
                 User = user,
                 StartDate = startDate,
                 EndDate = endDate,
-                IsAccepted = isAccepted
+                RequestState = State
             };
 
             _dbContext.Requests.Add(newRequest);
@@ -52,7 +52,7 @@ namespace CarRentApp.Src.Repositories
             return _dbContext.Requests.Where(r => r.UserId == userId).OrderByDescending(r => r.EndDate).ToList();
         }
         
-        public void UpdateRequest(int requestId, int carId, int userId, DateTime startDate, DateTime endDate, bool isAccepted)
+        public void UpdateRequest(int requestId, int carId, int userId, DateTime startDate, DateTime endDate, RequestState State)
         {
             Request? request = _dbContext.Requests.FirstOrDefault(r => r.Id == requestId);
             if (request != null)
@@ -61,7 +61,7 @@ namespace CarRentApp.Src.Repositories
                 request.UserId = userId;
                 request.StartDate = startDate;
                 request.EndDate = endDate;
-                request.IsAccepted = isAccepted;
+                request.RequestState = State;
 
                 _dbContext.SaveChanges();
             }
